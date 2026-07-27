@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etheridge Financial Forecast V3</title>
+
+<style>
+
+:root{
+  --bg:#eef2f7;
+  --card:#ffffff;
+  --primary:#4c1d95;
+  --primary2:#6d28d9;
+  --green:#15803d;
+  --red:#b91c1c;
+  --blue:#2563eb;
+  --gold:#b45309;
+  --border:#e2e8f0;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",system-ui,sans-serif;
+  background:var(--bg);
+  color:#222;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+.sidebar{
+  width:260px;
+  background:linear-gradient(
+    180deg,
+    #2e1065,
+    #4c1d95
+  );
+  color:white;
+  padding:20px;
+}
+
+.logo{
+  font-size:28px;
+  font-weight:800;
+  margin-bottom:30px;
+}
+
+.menu-item{
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:10px;
+  background:rgba(255,255,255,.08);
+}
+
+.main{
+  flex:1;
+  padding:25px;
+}
+
+.hero{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
+
+h1{
+  margin:0;
+  font-size:46px;
+  color:var(--primary);
+}
+
+.subtitle{
+  margin-top:8px;
+  color:#7c3aed;
+}
+
+.toggle-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+
+.pill{
+  padding:10px 16px;
+  border:none;
+  border-radius:999px;
+  cursor:pointer;
+
+  background:linear-gradient(
+    90deg,
+    #4c1d95,
+    #6d28d9
+  );
+
+  color:white;
+  font-weight:600;
+}
+
+.dashboard{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(230px,1fr));
+  gap:15px;
+}
+
+.card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.card-title{
+  font-size:12px;
+  text-transform:uppercase;
+  font-weight:700;
+  letter-spacing:.5px;
+  color:#6b7280;
+}
+
+.card-value{
+  font-size:34px;
+  font-weight:800;
+  margin-top:10px;
+}
+
+.card-green{
+  background:#ecfdf5;
+}
+
+.card-red{
+  background:#fef2f2;
+}
+
+.card-blue{
+  background:#eff6ff;
+}
+
+.card-gold{
+  background:#fffbeb;
+}
+
+@media(max-width:900px){
+
+  .app{
+    flex-direction:column;
+  }
+
+  .sidebar{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="sidebar">
+
+<div class="logo">
+🏦 BudgetV3
+</div>
+
+<div class="menu-item">🏠 Dashboard</div>
+<div class="menu-item">📖 Ledger</div>
+<div class="menu-item">📅 Timeline</div>
+<div class="menu-item">💰 Paychecks</div>
+<div class="menu-item">🎯 Goals</div>
+<div class="menu-item">✅ Reconciliation</div>
+
+</div>
+
+<div class="main">
+
+<div class="hero">
+
+<h1>
+🏦 Etheridge Financial Forecast
+</h1>
+
+<div class="subtitle">
+Household Budget • Forecasting • Financial Planning
+</div>
+
+<div class="toggle-row">
+
+<button class="pill">
+🏠 Household
+</button>
+
+<button class="pill">
+👻 Boo
+</button>
+
+<button class="pill">
+🏴‍☠️ Stephen
+</button>
+
+</div>
+
+<div class="toggle-row">
+
+<button class="pill">
+NOW
+</button>
+
+<button class="pill">
+PROJECTED
+</button>
+
+</div>
+
+</div>
+
+<div class="dashboard">
+
+<div class="card card-green">
+<div class="card-title">
+Available To Spend
+</div>
+<div class="card-value">
+$1,421
+</div>
+</div>
+
+<div class="card card-red">
+<div class="card-title">
+Due Before Income
+</div>
+<div class="card-value">
+$159
+</div>
+</div>
+
+<div class="card card-blue">
+<div class="card-title">
+Combined Cash
+</div>
+<div class="card-value">
+$1,580
+</div>
+</div>
+
+<div class="card card-gold">
+<div class="card-title">
+This Month Remaining
+</div>
+<div class="card-value">
+$4,792
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
