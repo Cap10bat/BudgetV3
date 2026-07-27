@@ -84,6 +84,13 @@ h1{
   color:#7c3aed;
 }
 
+.view-label{
+  margin-top:10px;
+  font-weight:700;
+  color:var(--primary);
+  font-size:14px;
+}
+  
 .toggle-row{
   display:flex;
   gap:10px;
@@ -215,17 +222,29 @@ h2{
 Household Budget • Forecasting • Financial Planning
 </div>
 
+
+  
+<div id="viewLabel" class="view-label">
+🏠 Household View
+</div>
+  
 <div class="toggle-row">
 
-<button class="pill">
+<button
+class="pill"
+onclick="switchView('Household')">
 🏠 Household
 </button>
 
-<button class="pill">
+<button
+class="pill"
+onclick="switchView('Boo')">
 👻 Boo
 </button>
 
-<button class="pill">
+<button
+class="pill"
+onclick="switchView('Stephen')">
 🏴‍☠️ Stephen
 </button>
 
@@ -233,11 +252,15 @@ Household Budget • Forecasting • Financial Planning
 
 <div class="toggle-row">
 
-<button class="pill">
+<button
+class="pill"
+onclick="switchMode('NOW')">
 NOW
 </button>
 
-<button class="pill">
+<button
+class="pill"
+onclick="switchMode('PROJECTED')">
 PROJECTED
 </button>
 
@@ -390,6 +413,30 @@ $4,792
 
 </div>
 
+<div class="hero" style="margin-top:20px;">
+
+<h2>📊 Monthly Summary</h2>
+
+<div class="dashboard">
+
+<div class="card">
+<div class="card-title">📅 July 2026</div>
+<div class="card-value">$4,168</div>
+</div>
+
+<div class="card">
+<div class="card-title">📅 August 2026</div>
+<div class="card-value">$6,746</div>
+</div>
+
+<div class="card">
+<div class="card-title">📅 September 2026</div>
+<div class="card-value">$10,145</div>
+</div>
+
+</div>
+
+</div>  
   
 </div>
 
@@ -398,6 +445,54 @@ $4,792
   
 </div>
 
+<script>
+
+let currentView = "Household";
+
+let currentMode = "NOW";
+
+function switchView(view){
+
+  currentView = view;
+
+  let label = "🏠 Household View";
+
+  if(view === "Boo"){
+    label = "👻 Boo View";
+  }
+
+  if(view === "Stephen"){
+    label = "🏴‍☠️ Stephen View";
+  }
+
+  document.getElementById(
+    "viewLabel"
+  ).innerText = label;
+
+}
+
+function switchMode(mode){
+
+  currentMode = mode;
+
+  let label =
+    document.getElementById(
+      "viewLabel"
+    ).innerText;
+
+  if(mode === "PROJECTED"){
+    label += " • Projected";
+  }
+
+  document.getElementById(
+    "viewLabel"
+  ).innerText = label;
+
+}
+
+
+</script>
+  
 </div>
 
 </body>
