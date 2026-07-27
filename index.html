@@ -2271,29 +2271,30 @@ document
 ========================= */
 
 function addPaycheck(
-  owner*
+  owner,
   amount,
   date
 ){
 
-  const id =*    `${owner}-${date}`;
+  const id =
+    `${owner}-${date}`;
 
-  const e*ists =
-    budgetData.timeline.som*(
+  const exists =
+    budgetData.timeline.some(
       item => item.id === id
-   *);
+    );
 
   if(exists) return;
 
-  budget*ata.timeline.push({
+  budgetData.timeline.push({
 
     id,
 
-    *wner,
+    owner,
 
     type:"income",
 
-    des*:`${owner} Paycheck`,
+    desc:`${owner} Paycheck`,
 
     amount,
 
