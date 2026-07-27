@@ -149,6 +149,41 @@ body{
   margin-bottom:25px;
 }
 
+functio* getRemainingExpenses(){
+
+  return*getVisibleItems()
+    .filter(item*=>
+      item.type === "expense" &*
+      !item.completed
+    )
+    .*educe(
+      (sum,item)=>sum + ite*.amount,
+      0
+    );
+
+}
+
+functi*n getRemainingIncome(){
+
+  return *etVisibleItems()
+    .filter(item *>
+      item.type === "income" &&
+*     !item.completed
+    )
+    .re*uce(
+      (sum,item)=>sum + item.*mount,
+      0
+    );
+
+}
+
+function*getAvailableToSpend(){
+
+  return g*tCurrentCash() -
+    getRemainingE*penses();
+
+}
+  
 /* DASHBOARD */
 
 .dashboard-grid{
@@ -1408,16 +1443,124 @@ function getBillsPaid(){
 
 }
 
+function getRemainingExpenses(){
+
+  return getVisibleItems()
+    .filter(item =>
+      item.type === "expense" &&
+      !item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+
+function getRemainingIncome(){
+
+  return getVisibleItems()
+    .filter(item =>
+      item.type === "income" &&
+      !item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+
+function getCurrentCash(){
+
+  const view =
+    document.getElementById(
+      "viewSelector"
+    ).value;
+
+  if(view === "Household"){
+
+    return (
+
+      budgetData.accounts.booChecking +
+      budgetData.accounts.booSavings +
+
+      budgetData.accounts.stephenChecking +
+      budgetData.accounts.stephenSavings
+
+    );
+
+  }
+
+  if(view === "Boo"){
+
+    return (
+
+      budgetData.accounts.booChecking +
+      budgetData.accounts.booSavings
+
+    );
+
+  }
+
+  return (
+
+    budgetData.accounts.stephenChecking +
+    budgetData.accounts.stephenSavings
+
+  );
+
+}
+
+function getAvailableToSpend(){
+
+  return (
+
+    getCurrentCash() -
+    getRemainingExpenses()
+
+  );
+
+}
+
+  
 /* =========================
    DASHBOARD
 ========================= */
 
 function renderDashboard(){
 
+  const combinedCash =
+    getCurrentCash();
+
+  const remainingExpenses =
+    getRemainingExpenses();
+
+  const remainingIncome =
+    getRemainingIncome();
+
+  const available =
+    getAvailableToSpend();
+
   document.getElementById(
     "combinedCash"
   ).textContent =
-    money(getCombinedCash());
+    money(combinedCash);
+
+  document.getElementById(
+    "monthRemaining"
+  ).textContent =
+    money(remainingExpenses);
+
+  document.getElementById(
+    "dueBeforeIncome"
+  ).textContent =
+    money(remainingExpenses);
+
+  document.getElementById(
+    "availableToSpend"
+  ).textContent =
+    money(available);
 
   document.getElementById(
     "incomeReceived"
