@@ -152,6 +152,23 @@ h1{
   background:#fffbeb;
 }
 
+  .coming-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.coming-item:last-child{
+  border-bottom:none;
+}
+
+h2{
+  margin-top:0;
+  color:var(--primary);
+}
+
 @media(max-width:900px){
 
   .app{
@@ -268,6 +285,41 @@ $4,792
 
 </div>
 
+<div class="hero" style="margin-top:20px;">
+
+<h2>📌 Coming Up</h2>
+
+<div class="coming-item">
+  <span>🏴‍☠️ Stephen Paycheck</span>
+  <strong style="color:var(--green);">
+    +$1,364
+  </strong>
+</div>
+
+<div class="coming-item">
+  <span>🏴‍☠️ Car Note</span>
+  <strong style="color:var(--red);">
+    -$550
+  </strong>
+</div>
+
+<div class="coming-item">
+  <span>👻 Klarna</span>
+  <strong style="color:var(--red);">
+    -$300
+  </strong>
+</div>
+
+<div class="coming-item">
+  <span>🏠 Rent</span>
+  <strong style="color:var(--red);">
+    -$2,000
+  </strong>
+  
+</div>
+
+</div>
+  
 </div>
 
 </div>
