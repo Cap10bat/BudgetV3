@@ -4,32 +4,34 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Etheridge Financial Forecast V3</title>
+<title>BudgetV3</title>
 
 <style>
-
 :root{
-  --bg:#eef2f7;
-  --card:#ffffff;
-  --primary:#4c1d95;
-  --primary2:#6d28d9;
-  --green:#15803d;
-  --red:#b91c1c;
-  --blue:#2563eb;
-  --gold:#b45309;
-  --border:#dbe2ea;
+  --bg:#0f172a;
+  --card:#1e293b;
+  --card2:#334155;
+  --accent:#8b5cf6;
+  --accent2:#a855f7;
+  --success:#22c55e;
+  --warning:#f59e0b;
+  --danger:#ef4444;
+  --text:#f8fafc;
+  --muted:#cbd5e1;
+  --border:#475569;
 }
 
 *{
-  box-sizing:border-box;
   margin:0;
   padding:0;
+  box-sizing:border-box;
+  font-family:"Segoe UI",sans-serif;
 }
 
 body{
   background:var(--bg);
-  font-family:"Segoe UI",system-ui,sans-serif;
-  color:#222;
+  color:var(--text);
+  min-height:100vh;
 }
 
 .app{
@@ -37,150 +39,326 @@ body{
   min-height:100vh;
 }
 
+/* SIDEBAR */
+
 .sidebar{
-  width:240px;
-  background:linear-gradient(
-    180deg,
-    #2e1065,
-    #4c1d95
-  );
-  color:white;
+  width:280px;
+  background:#111827;
+  border-right:1px solid var(--border);
   padding:20px;
+  overflow-y:auto;
 }
 
 .logo{
-  font-size:34px;
-  font-weight:800;
+  text-align:center;
   margin-bottom:25px;
 }
 
-.menu-item{
-  padding:14px;
-  border-radius:12px;
-  margin-bottom:10px;
-  background:rgba(255,255,255,.08);
-  cursor:pointer;
+.logo h1{
+  color:var(--accent);
+  margin-bottom:5px;
 }
 
-.menu-item:hover{
-  background:rgba(255,255,255,.15);
+.logo p{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.nav-section{
+  margin-bottom:22px;
+}
+
+.nav-title{
+  color:#94a3b8;
+  font-size:.75rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  margin-bottom:10px;
+}
+
+.nav-btn{
+  width:100%;
+  background:transparent;
+  color:var(--text);
+  border:none;
+  text-align:left;
+  padding:12px;
+  margin-bottom:6px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:15px;
+  transition:.2s;
+}
+
+.nav-btn:hover{
+  background:var(--card);
+}
+
+.nav-btn.active{
+  background:var(--accent);
 }
 
 .main{
   flex:1;
-  padding:24px;
-}
-
-.hero{
-  background:white;
-  border:1px solid var(--border);
-  border-radius:18px;
   padding:20px;
-  margin-bottom:20px;
-  box-shadow:0 6px 16px rgba(0,0,0,.08);
+  overflow:auto;
 }
 
-h1{
-  font-size:48px;
-  color:var(--primary);
-  font-weight:800;
-}
+/* TOP BAR */
 
-.subtitle{
-  margin-top:8px;
-  color:#7c3aed;
-}
-
-.view-label{
-  margin-top:12px;
-  font-weight:700;
-  color:var(--primary);
-}
-
-.toggle-row{
+.topbar{
   display:flex;
-  flex-wrap:wrap;
+  justify-content:space-between;
   gap:10px;
-  margin-top:18px;
+  flex-wrap:wrap;
+  margin-bottom:20px;
 }
 
-.pill{
-  border:none;
-  border-radius:999px;
-  padding:10px 16px;
+.top-card{
+  background:var(--card);
+  padding:12px;
+  border-radius:12px;
+  min-width:160px;
+}
+
+.top-card label{
+  display:block;
+  color:var(--muted);
+  font-size:.8rem;
+  margin-bottom:6px;
+}
+
+.top-card select{
+  width:100%;
+  background:var(--card2);
   color:white;
-  cursor:pointer;
-  font-weight:600;
-  background:linear-gradient(
-    90deg,
-    #4c1d95,
-    #6d28d9
-  );
+  border:none;
+  padding:8px;
+  border-radius:8px;
 }
 
-.dashboard{
+/* PAGE TITLES */
+
+.page-title{
+  font-size:28px;
+  margin-bottom:20px;
+}
+
+.page-subtitle{
+  color:var(--muted);
+  margin-bottom:25px;
+}
+
+/* DASHBOARD */
+
+.dashboard-grid{
   display:grid;
-  grid-template-columns:
-  repeat(auto-fit,minmax(230px,1fr));
-  gap:15px;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
 }
 
 .card{
-  background:white;
+  background:var(--card);
   border:1px solid var(--border);
-  border-radius:16px;
+  border-radius:18px;
   padding:18px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
 }
 
-.card-title{
-  font-size:12px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  color:#6b7280;
+.card h3{
+  font-size:.9rem;
+  color:var(--muted);
+  margin-bottom:10px;
 }
 
 .card-value{
-  font-size:34px;
-  font-weight:800;
-  margin-top:10px;
+  font-size:2rem;
+  font-weight:700;
 }
 
-.card-green{
-  background:#ecfdf5;
+.green{
+  color:var(--success);
 }
 
-.card-red{
-  background:#fef2f2;
+.red{
+  color:var(--danger);
 }
 
-.card-blue{
-  background:#eff6ff;
+.orange{
+  color:var(--warning);
 }
 
-.card-gold{
-  background:#fffbeb;
+.purple{
+  color:var(--accent2);
 }
 
-h2{
-  margin-bottom:18px;
-  color:var(--primary);
+/* PAGE CONTAINERS */
+
+.page{
+  display:none;
 }
 
- .coming-item{
+.page.active{
+  display:block;
+}
+
+/* TABLES */
+
+.table-wrap{
+  background:var(--card);
+  border-radius:18px;
+  overflow:hidden;
+  border:1px solid var(--border);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#1a2233;
+  text-align:left;
+  padding:12px;
+}
+
+td{
+  padding:12px;
+  border-top:1px solid var(--border);
+}
+
+tr:hover{
+  background:#212d44;
+}
+
+/* CHECKBOX */
+
+.big-check{
+  width:18px;
+  height:18px;
+}
+
+/* BUTTONS */
+
+.btn{
+  background:var(--accent);
+  border:none;
+  color:white;
+  padding:10px 14px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.btn:hover{
+  opacity:.9;
+}
+
+.btn-secondary{
+  background:var(--card2);
+}
+
+.btn-success{
+  background:var(--success);
+}
+
+.btn-danger{
+  background:var(--danger);
+}
+
+/* FORMS */
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:14px;
+}
+
+.input-group{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.input-group label{
+  color:var(--muted);
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea{
+  background:var(--card2);
+  border:1px solid var(--border);
+  color:white;
+  padding:10px;
+  border-radius:10px;
+}
+
+textarea{
+  min-height:120px;
+}
+
+/* FORECAST */
+
+.forecast-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.forecast-box{
+  background:var(--card);
+  border-radius:16px;
+  padding:18px;
+  border:1px solid var(--border);
+}
+
+.forecast-box h2{
+  margin-bottom:10px;
+}
+
+/* KPI */
+
+.kpi{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  padding:14px 0;
+  margin-top:10px;
+  padding:10px 0;
   border-bottom:1px solid var(--border);
 }
 
-.coming-item:last-child{
-  border-bottom:none;
-} 
+/* ACTIVITY */
 
-@media(max-width:900px){
+.activity-item{
+  background:var(--card);
+  border-radius:12px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+/* GOAL */
+
+.goal-card{
+  background:var(--card);
+  border-radius:15px;
+  padding:15px;
+  margin-bottom:10px;
+}
+
+/* HELP */
+
+.help-block{
+  background:var(--card);
+  margin-bottom:15px;
+  padding:15px;
+  border-radius:14px;
+}
+
+.help-block h3{
+  margin-bottom:8px;
+}
+
+/* MOBILE */
+
+@media(max-width:1000px){
 
   .app{
     flex-direction:column;
@@ -190,6 +368,9 @@ h2{
     width:100%;
   }
 
+  .forecast-grid{
+    grid-template-columns:1fr;
+  }
 }
 
 </style>
@@ -199,432 +380,1060 @@ h2{
 
 <div class="app">
 
+<!-- SIDEBAR -->
+
 <div class="sidebar">
 
 <div class="logo">
-🏦 BudgetV3
+<h1>💜 BudgetV3</h1>
+<p>Household Financial Command Center</p>
 </div>
 
-<div class="menu-item">🏠 Dashboard</div>
-<div class="menu-item">📌 Coming Up</div>
-<div class="menu-item">💰 Paychecks</div>
-<div class="menu-item">📈 Forecasts</div>
-<div class="menu-item">📊 Monthly Summary</div>
-<div class="menu-item">📅 Timeline</div>
-<div class="menu-item">📖 Ledger</div>
-<div class="menu-item">🎯 Goals</div>
-<div class="menu-item">✅ Reconciliation</div>
-<div class="menu-item">⚙️ Settings</div>
+<div class="nav-section">
+
+<div class="nav-title">Main</div>
+
+<button class="nav-btn active" onclick="showPage('dashboard')">
+🏠 Dashboard
+</button>
+
+<button class="nav-btn" onclick="showPage('comingUp')">
+📌 Coming Up
+</button>
+
+<button class="nav-btn" onclick="showPage('paychecks')">
+💰 Paychecks
+</button>
+
+<button class="nav-btn" onclick="showPage('forecasts')">
+📈 Forecasts
+</button>
+
+<button class="nav-btn" onclick="showPage('summary')">
+📊 Monthly Summary
+</button>
+
+<button class="nav-btn" onclick="showPage('timeline')">
+📅 Timeline
+</button>
+
+<button class="nav-btn" onclick="showPage('ledger')">
+📖 Ledger
+</button>
+
+<button class="nav-btn" onclick="showPage('goals')">
+🎯 Goals
+</button>
+
+<button class="nav-btn" onclick="showPage('reconcile')">
+✅ Reconcile
+</button>
+
+<button class="nav-btn" onclick="showPage('activity')">
+📜 Activity Log
+</button>
+
+<button class="nav-btn" onclick="showPage('netyear')">
+📊 Net Year Analysis
+</button>
+
+<button class="nav-btn" onclick="showPage('settings')">
+⚙️ Settings
+</button>
+
+<button class="nav-btn" onclick="showPage('help')">
+❓ Help
+</button>
 
 </div>
+
+</div>
+
+<!-- MAIN -->
 
 <div class="main">
 
-<div class="hero">
+<div class="topbar">
 
-<h1>
-🏦 Etheridge Financial Forecast
+<div class="top-card">
+<label>View</label>
+<select id="viewSelector">
+<option>Household</option>
+<option>Boo</option>
+<option>Stephen</option>
+</select>
+</div>
+
+<div class="top-card">
+<label>Mode</label>
+<select id="modeSelector">
+<option>NOW</option>
+<option>PROJECTED</option>
+</select>
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div id="dashboard" class="page active">
+
+<h1 class="page-title">🏠 Dashboard</h1>
+<p class="page-subtitle">
+Financial snapshot of the household.
+</p>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h3>💰 Available To Spend</h3>
+<div class="card-value green" id="availableToSpend">
+$0
+</div>
+</div>
+
+<div class="card">
+<h3>⚠️ Due Before Income</h3>
+<div class="card-value orange" id="dueBeforeIncome">
+$0
+</div>
+</div>
+
+<div class="card">
+<h3>🏦 Combined Cash</h3>
+<div class="card-value purple" id="combinedCash">
+$0
+</div>
+</div>
+
+<div class="card">
+<h3>📅 Month Remaining</h3>
+<div class="card-value" id="monthRemaining">
+$0
+</div>
+</div>
+
+<div class="card">
+<h3>✅ Bills Paid</h3>
+<div class="card-value green" id="billsPaid">
+0
+</div>
+</div>
+
+<div class="card">
+<h3>💵 Income Received</h3>
+<div class="card-value green" id="incomeReceived">
+0
+</div>
+</div>
+
+</div>
+
+</div>
+
+<!-- COMING UP -->
+
+<div id="comingUp" class="page">
+
+<h1 class="page-title">📌 Coming Up</h1>
+<p class="page-subtitle">
+Next 30 days of bills and income.
+</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Date</th>
+<th>Description</th>
+<th>Owner</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody id="comingUpTable">
+</tbody>
+
+</table>
+</div>
+
+</div>
+
+<!-- PAYCHECKS -->
+
+<div id="paychecks" class="page">
+
+<h1 class="page-title">💰 Paychecks</h1>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Received</th>
+<th>Date</th>
+<th>Owner</th>
+<th>Description</th>
+<th>Amount</th>
+</tr>
+</thead>
+
+<tbody id="paycheckTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<!-- FORECASTS -->
+
+<div id="forecasts" class="page">
+
+<h1 class="page-title">
+📈 Forecasts
 </h1>
 
-<div class="subtitle">
-Household Budget • Forecasting • Financial Planning
+<div class="forecast-grid">
+
+<div class="forecast-box">
+
+<h2>NOW</h2>
+
+<div class="kpi">
+<span>Current Cash</span>
+<span id="nowCash">$0</span>
 </div>
 
-<div id="viewLabel" class="view-label">
-🏠 Household View
+<div class="kpi">
+<span>Income Remaining</span>
+<span id="nowIncome">$0</span>
 </div>
 
-<div class="toggle-row">
-
-<button
-class="pill"
-onclick="switchView('Household')">
-🏠 Household
-</button>
-
-<button
-class="pill"
-onclick="switchView('Boo')">
-👻 Boo
-</button>
-
-<button
-class="pill"
-onclick="switchView('Stephen')">
-🏴‍☠️ Stephen
-</button>
-
+<div class="kpi">
+<span>Expenses Remaining</span>
+<span id="nowExpenses">$0</span>
 </div>
 
-<div class="toggle-row">
+<div class="kpi">
+<span>Net Flow</span>
+<span id="nowFlow">$0</span>
+</div>
 
-<button
-class="pill"
-onclick="switchMode('NOW')">
-NOW
-</button>
-
-<button
-class="pill"
-onclick="switchMode('PROJECTED')">
-PROJECTED
-</button>
-
+<div class="kpi">
+<span>Month End</span>
+<span id="nowMonthEnd">$0</span>
 </div>
 
 </div>
 
-<div class="dashboard">
+<div class="forecast-box">
 
-<div class="card card-green">
-<div class="card-title">
-Available To Spend
+<h2>PROJECTED</h2>
+
+<div class="kpi">
+<span>Current Cash</span>
+<span id="projCash">$0</span>
 </div>
-<div id="availableToSpend" class="card-value">
+
+<div class="kpi">
+<span>Income Remaining</span>
+<span id="projIncome">$0</span>
+</div>
+
+<div class="kpi">
+<span>Expenses Remaining</span>
+<span id="projExpenses">$0</span>
+</div>
+
+<div class="kpi">
+<span>Net Flow</span>
+<span id="projFlow">$0</span>
+</div>
+
+<div class="kpi">
+<span>Month End</span>
+<span id="projMonthEnd">$0</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SUMMARY -->
+
+<div id="summary" class="page">
+
+<h1 class="page-title">
+📊 Monthly Summary
+</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+<h3>✅ Income Received</h3>
+<div class="card-value" id="summaryIncomeReceived">
 $0
 </div>
 </div>
 
-<div class="card card-red">
-<div class="card-title">
-Due Before Income
-</div>
-<div id="dueBeforeIncome" class="card-value">
+<div class="card">
+<h3>⏳ Income Remaining</h3>
+<div class="card-value" id="summaryIncomeRemaining">
 $0
 </div>
 </div>
 
-<div class="card card-blue">
-<div class="card-title">
-Combined Cash
-</div>
-<div id="combinedCash" class="card-value">
+<div class="card">
+<h3>✅ Bills Paid</h3>
+<div class="card-value" id="summaryBillsPaid">
 $0
 </div>
 </div>
 
-<div class="card card-gold">
-<div class="card-title">
-This Month Remaining
+<div class="card">
+<h3>⏳ Bills Remaining</h3>
+<div class="card-value" id="summaryBillsRemaining">
+$0
 </div>
-<div id="monthRemaining" class="card-value">
+</div>
+
+<div class="card">
+<h3>💰 Net Remaining</h3>
+<div class="card-value" id="summaryNetRemaining">
 $0
 </div>
 </div>
 
 </div>
 
-<div class="hero">
-
-<h2>📌 Coming Up</h2>
-
-<div class="coming-item">
-  <span>🏴‍☠️ Stephen Paycheck</span>
-  <strong style="color:var(--green);">
-    +$1,364
-  </strong>
 </div>
 
-<div class="coming-item">
-  <span>🏴‍☠️ Car Note</span>
-  <strong style="color:var(--red);">
-    -$550
-  </strong>
-</div>
+<!-- TIMELINE -->
 
-<div class="coming-item">
-  <span>👻 Klarna</span>
-  <strong style="color:var(--red);">
-    -$300
-  </strong>
-</div>
+<div id="timeline" class="page">
 
-<div class="coming-item">
-  <span>🏠 Rent</span>
-  <strong style="color:var(--red);">
-    -$2,000
-  </strong>
+<h1 class="page-title">
+📅 Timeline
+</h1>
+
+<div id="timelineContainer">
 </div>
 
 </div>
 
-<div class="hero">
+<!-- LEDGER -->
 
-<h2>📈 Forecasts</h2>
+<div id="ledger" class="page">
 
-<div class="dashboard">
+<h1 class="page-title">
+📖 Ledger
+</h1>
 
-<div class="card card-gold">
-  <div class="card-title">📅 July</div>
-  <div class="card-value">$4,168</div>
-</div>
+<div class="table-wrap">
 
-<div class="card card-green">
-  <div class="card-title">📅 August</div>
-  <div class="card-value">$6,746</div>
-</div>
+<table>
 
-<div class="card card-green">
-  <div class="card-title">📅 September</div>
-  <div class="card-value">$10,145</div>
-</div>
+<thead>
+<tr>
+<th>Date</th>
+<th>Description</th>
+<th>Owner</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+</thead>
 
-<div class="card card-green">
-  <div class="card-title">📅 October</div>
-  <div class="card-value">$13,594</div>
-</div>
+<tbody id="ledgerTable">
+</tbody>
 
-<div class="card card-green">
-  <div class="card-title">📅 November</div>
-  <div class="card-value">$17,043</div>
-</div>
-
-<div class="card card-green">
-  <div class="card-title">📅 December</div>
-  <div class="card-value">$21,856</div>
-</div>
+</table>
 
 </div>
 
 </div>
 
-<div class="hero">
+<!-- GOALS -->
 
-<h2>💰 Paychecks</h2>
+<div id="goals" class="page">
 
-<div class="coming-item">
+<h1 class="page-title">
+🎯 Goals
+</h1>
 
-<span>
-🏴‍☠️ Stephen Paycheck
+<div id="goalContainer">
+</div>
+
+</div>
+
+<!-- RECONCILE -->
+
+<div id="reconcile" class="page">
+
+<h1 class="page-title">
+✅ Reconcile
+</h1>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div class="input-group">
+<label>Boo Checking</label>
+<input id="booCheckingInput" type="number">
+</div>
+
+<div class="input-group">
+<label>Boo Savings</label>
+<input id="booSavingsInput" type="number">
+</div>
+
+<div class="input-group">
+<label>Stephen Checking</label>
+<input id="stephenCheckingInput" type="number">
+</div>
+
+<div class="input-group">
+<label>Stephen Savings</label>
+<input id="stephenSavingsInput" type="number">
+</div>
+
+</div>
+
 <br>
-<small>July 31, 2026</small>
-</span>
 
-<strong style="color:var(--green);">
-+$1,364
-</strong>
+<button class="btn">
+Update Balances
+</button>
 
 </div>
 
-<div class="coming-item">
+</div>
+<!-- ACTIVITY LOG -->
 
-<span>
-👻 Boo Paycheck
+<div id="activity" class="page">
+
+<h1 class="page-title">
+📜 Activity Log
+</h1>
+
+<p class="page-subtitle">
+Track every change made inside BudgetV3.
+</p>
+
+<div id="activityContainer">
+
+<div class="activity-item">
+Activity will appear here.
+</div>
+
+</div>
+
+</div>
+
+<!-- NET YEAR ANALYSIS -->
+
+<div id="netyear" class="page">
+
+<h1 class="page-title">
+📊 Net Year Analysis
+</h1>
+
+<p class="page-subtitle">
+Review income growth, expense changes and projected year-end finances.
+</p>
+
+<div class="card">
+
+<button class="btn" id="generateYearBtn">
+Generate Net Year Analysis
+</button>
+
+<br><br>
+
+<div id="yearAnalysisResults">
+
+<div class="kpi">
+<span>Income Changes</span>
+<span id="yearIncomeChange">$0</span>
+</div>
+
+<div class="kpi">
+<span>Expense Changes</span>
+<span id="yearExpenseChange">$0</span>
+</div>
+
+<div class="kpi">
+<span>New Bills Added</span>
+<span id="yearNewBills">0</span>
+</div>
+
+<div class="kpi">
+<span>Removed Bills</span>
+<span id="yearRemovedBills">0</span>
+</div>
+
+<div class="kpi">
+<span>Largest Expense</span>
+<span id="yearLargestExpense">-</span>
+</div>
+
+<div class="kpi">
+<span>Projected Year End</span>
+<span id="yearProjectedEnd">$0</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- SETTINGS -->
+
+<div id="settings" class="page">
+
+<h1 class="page-title">
+⚙️ Settings
+</h1>
+
+<div class="dashboard-grid">
+
+<div class="card">
+
+<h3>📤 Export Budget</h3>
+
+<p>
+Create a portable backup and sync file.
+</p>
+
 <br>
-<small>August 10, 2026</small>
-</span>
 
-<strong style="color:var(--green);">
-+$3,000
-</strong>
+<button class="btn">
+Export Budget
+</button>
 
-</div>
-
-</div>
-
-<div class="hero">
-
-<h2>📊 Monthly Summary</h2>
-
-<div class="dashboard">
-
-<div class="card">
-<div class="card-title">📅 July 2026</div>
-<div class="card-value">$4,168</div>
 </div>
 
 <div class="card">
-<div class="card-title">📅 August 2026</div>
-<div class="card-value">$6,746</div>
+
+<h3>📥 Import Budget</h3>
+
+<p>
+Merge updates without replacing data.
+</p>
+
+<br>
+
+<input type="file">
+
 </div>
 
 <div class="card">
-<div class="card-title">📅 September 2026</div>
-<div class="card-value">$10,145</div>
+
+<h3>🔮 Forecast Buffer</h3>
+
+<select id="forecastBuffer">
+
+<option value="0">$0</option>
+<option value="250">$250</option>
+<option value="500">$500</option>
+<option value="1000">$1000</option>
+
+</select>
+
 </div>
+
+<div class="card">
+
+<h3>🎨 Theme</h3>
+
+<select>
+
+<option>Purple</option>
+<option>Dark</option>
+
+</select>
+
+</div>
+
+<div class="card">
+
+<h3>ℹ️ About</h3>
+
+<p>
+BudgetV3 Household Finance System
+</p>
 
 </div>
 
 </div>
 
-  </div>
+</div>
+
+<!-- HELP -->
+
+<div id="help" class="page">
+
+<h1 class="page-title">
+❓ Help Center
+</h1>
+
+<div class="help-block">
+
+<h3>
+🏠 Dashboard
+</h3>
+
+<p>
+Dashboard provides a quick overview of current finances and answers the question:
+Where do we stand right now?
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📌 Coming Up
+</h3>
+
+<p>
+Displays unpaid bills and unreceived income expected during the next 30 days.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+💰 Paychecks
+</h3>
+
+<p>
+Shows all scheduled paychecks for the year.
+Marking income as received updates forecasts, balances and reports.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📈 Forecasts
+</h3>
+
+<p>
+NOW shows current reality.
+PROJECTED assumes future income and bills occur as planned.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📊 Monthly Summary
+</h3>
+
+<p>
+Provides a quick month status showing received income, paid bills and remaining activity.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📅 Timeline
+</h3>
+
+<p>
+Displays upcoming future financial events in chronological order.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📖 Ledger
+</h3>
+
+<p>
+Permanent historical record of completed income and expense activity.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+🎯 Goals
+</h3>
+
+<p>
+Goals are informational only.
+Goals never affect forecasting calculations.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+✅ Reconcile
+</h3>
+
+<p>
+Update actual account balances and recalculate all financial data.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+📜 Activity Log
+</h3>
+
+<p>
+Automatically records major events including bills paid,
+income received,
+imports,
+exports and balance updates.
+</p>
+
+</div>
+
+<div class="help-block">
+
+<h3>
+🔄 Sync
+</h3>
+
+<p>
+Imports merge newer changes into existing data.
+Imports never replace the entire budget.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <script>
 
-let currentView = "Household";
-let currentMode = "NOW";
+function showPage(pageId){
 
-let budgetData = {
+document
+.querySelectorAll('.page')
+.forEach(page=>{
+page.classList.remove('active');
+});
+
+document
+.getElementById(pageId)
+.classList.add('active');
+
+document
+.querySelectorAll('.nav-btn')
+.forEach(btn=>{
+btn.classList.remove('active');
+});
+
+event.target.classList.add('active');
+}
+
+/* =========================
+   BUDGET DATA
+========================= */
+
+const budgetData = {
+
+  accounts:{
+    booChecking:2300,
+    booSavings:1000,
+    stephenChecking:-140,
+    stephenSavings:0
+  },
+
+  settings:{
+    currentView:"Household",
+    currentMode:"NOW",
+    forecastBuffer:0
+  },
+
+  goals:[],
+
+  activityLog:[],
 
   timeline:[
 
     {
-      date:"2026-07-31",
-      owner:"Stephen",
-      type:"income",
-      desc:"Stephen Paycheck",
-      amount:1364
-    },
-
-    {
-      date:"2026-07-31",
-      owner:"Stephen",
-      type:"expense",
-      desc:"Car Note",
-      amount:550
-    },
-
-    {
-      date:"2026-07-26",
-      owner:"Boo",
-      type:"expense",
-      desc:"Klarna",
-      amount:300
-    },
-
-    {
-      date:"2026-08-01",
+      id:"rent-1",
       owner:"Household",
       type:"expense",
       desc:"Rent",
-      amount:2000
+      amount:1900,
+      date:"2026-08-25",
+      completed:false
     },
 
     {
+      id:"phone-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Phone",
+      amount:231,
+      date:"2026-08-25",
+      completed:false
+    },
+
+    {
+      id:"water-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Water",
+      amount:52,
+      date:"2026-08-25",
+      completed:false
+    },
+
+    {
+      id:"internet-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Internet",
+      amount:70,
+      date:"2026-08-22",
+      completed:false
+    },
+
+    {
+      id:"insurance-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Insurance",
+      amount:650,
       date:"2026-08-10",
+      completed:false
+    },
+
+    {
+      id:"power-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Power",
+      amount:300,
+      date:"2026-08-20",
+      completed:false
+    },
+
+    {
+      id:"groceries-1",
+      owner:"Household",
+      type:"expense",
+      desc:"Groceries",
+      amount:250,
+      date:"2026-08-15",
+      completed:false
+    },
+
+    {
+      id:"boo-car",
+      owner:"Boo",
+      type:"expense",
+      desc:"Car Payment",
+      amount:700,
+      date:"2026-08-10",
+      completed:false
+    },
+
+    {
+      id:"boo-cc",
+      owner:"Boo",
+      type:"expense",
+      desc:"Credit Card",
+      amount:300,
+      date:"2026-08-10",
+      completed:false
+    },
+
+    {
+      id:"klarna",
+      owner:"Boo",
+      type:"expense",
+      desc:"Klarna",
+      amount:300,
+      date:"2026-08-25",
+      completed:false
+    },
+
+    {
+      id:"stephen-car",
+      owner:"Stephen",
+      type:"expense",
+      desc:"Car Payment",
+      amount:550,
+      date:"2026-08-18",
+      completed:false
+    },
+
+    {
+      id:"loan",
+      owner:"Stephen",
+      type:"expense",
+      desc:"Loan",
+      amount:159,
+      date:"2026-08-15",
+      completed:false
+    },
+
+    {
+      id:"stephen-cc",
+      owner:"Stephen",
+      type:"expense",
+      desc:"Credit Card",
+      amount:50,
+      date:"2026-08-15",
+      completed:false
+    },
+
+    {
+      id:"transfer",
+      owner:"Stephen",
+      type:"expense",
+      desc:"Transfer To Boo",
+      amount:530,
+      date:"2026-08-14",
+      completed:false
+    },
+
+    {
+      id:"boo-pay-1",
       owner:"Boo",
       type:"income",
       desc:"Boo Paycheck",
-      amount:3000
+      amount:3000,
+      date:"2026-08-10",
+      completed:false
+    },
+
+    {
+      id:"boo-pay-2",
+      owner:"Boo",
+      type:"income",
+      desc:"Boo Paycheck",
+      amount:3000,
+      date:"2026-08-25",
+      completed:false
+    },
+
+    {
+      id:"stephen-pay-1",
+      owner:"Stephen",
+      type:"income",
+      desc:"Stephen Paycheck",
+      amount:1364,
+      date:"2026-08-14",
+      completed:false
     }
 
   ]
 
 };
 
-  
-function updateViewLabel(){
+/* =========================
+   UTILITIES
+========================= */
 
-  let label = "🏠 Household View";
+function money(value){
 
-  if(currentView === "Boo"){
-    label = "👻 Boo View";
-  }
-
-  if(currentView === "Stephen"){
-    label = "🏴‍☠️ Stephen View";
-  }
-
-  if(currentMode === "PROJECTED"){
-    label += " • Projected";
-  }
-
-  document.getElementById(
-    "viewLabel"
-  ).innerText = label;
-
-}
-
-function switchView(view){
-
-  currentView = view;
-
-  updateViewLabel();
-
-  testView();
-
-  renderDashboard();
-
-}
-
-function switchMode(mode){
-
-  currentMode = mode;
-
-  updateViewLabel();
-
-  testView();
-
-  renderDashboard();
-
-}
-
- function getVisibleItems(){
-
-  if(currentView === "Household"){
-    return budgetData.timeline;
-  }
-
-  return budgetData.timeline.filter(
-    item =>
-
-      item.owner === currentView ||
-
-      item.owner === "Household"
-
-  );
-
-}
-
-  function testView(){
-
-  console.log(
-    "Current View:",
-    currentView
-  );
-
-  console.log(
-    getVisibleItems()
-  );
-
-}
-  function renderDashboard(){
-
-  const items =
-    getVisibleItems();
-
-  let income = 0;
-  let expenses = 0;
-
-  items.forEach(item => {
-
-    if(item.type === "income"){
-      income += item.amount;
+  return value.toLocaleString(
+    "en-US",
+    {
+      style:"currency",
+      currency:"USD"
     }
+  );
 
-    if(item.type === "expense"){
-      expenses += item.amount;
-    }
+}
 
+function addActivity(message){
+
+  budgetData.activityLog.unshift({
+    date:new Date().toLocaleString(),
+    message
   });
+
+}
+
+function getCombinedCash(){
+
+  return (
+    budgetData.accounts.booChecking +
+    budgetData.accounts.booSavings +
+    budgetData.accounts.stephenChecking +
+    budgetData.accounts.stephenSavings
+  );
+
+}
+
+function getIncomeReceived(){
+
+  return budgetData.timeline
+  .filter(x=>x.type==="income" && x.completed)
+  .reduce((a,b)=>a+b.amount,0);
+
+}
+
+function getBillsPaid(){
+
+  return budgetData.timeline
+  .filter(x=>x.type==="expense" && x.completed)
+  .reduce((a,b)=>a+b.amount,0);
+
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+function renderDashboard(){
 
   document.getElementById(
     "combinedCash"
-  ).innerText =
-    "$" + (income - expenses).toLocaleString();
+  ).textContent =
+    money(getCombinedCash());
 
   document.getElementById(
-    "availableToSpend"
-  ).innerText =
-    "$" + (income - expenses).toLocaleString();
+    "incomeReceived"
+  ).textContent =
+    money(getIncomeReceived());
 
   document.getElementById(
-    "dueBeforeIncome"
-  ).innerText =
-    "$" + expenses.toLocaleString();
-
-  document.getElementById(
-    "monthRemaining"
-  ).innerText =
-    "$" + income.toLocaleString();
+    "billsPaid"
+  ).textContent =
+    money(getBillsPaid());
 
 }
 
-testView();
+/* =========================
+   APP STARTUP
+========================= */
 
 renderDashboard();
 
-  
 </script>
 
 </body>
