@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>BudgetV3</title>
+<title>Etheridge Financial</title>
 
 <style>
 :root{
@@ -385,7 +385,7 @@ textarea{
 <div class="sidebar">
 
 <div class="logo">
-<h1>💜 BudgetV3</h1>
+<h1>💜 Etheridge Financial</h1>
 <p>Household Financial Command Center</p>
 </div>
 
@@ -808,7 +808,10 @@ $0
 
 <br>
 
-<button class="btn">
+<button
+  class="btn"
+  onclick="updateBalances()"
+>
 Update Balances
 </button>
 
@@ -824,7 +827,7 @@ Update Balances
 </h1>
 
 <p class="page-subtitle">
-Track every change made inside BudgetV3.
+Track every change made inside Etheridge Financial.
 </p>
 
 <div id="activityContainer">
@@ -968,7 +971,7 @@ Merge updates without replacing data.
 <h3>ℹ️ About</h3>
 
 <p>
-BudgetV3 Household Finance System
+Etheridge Household Finance System
 </p>
 
 </div>
@@ -1866,6 +1869,232 @@ function buildRecurringData(){
 
 }
 
+  /* =========================
+   FORECAST ENGINE
+========================= */
+
+function getRemainingIncome(){
+
+  return getVisibleItems()
+    .filter(item =>
+      item.type === "income" &&
+      !item.completed
+    )
+    .reduce(
+      (total,item)=>
+      total + item.amount,
+      0
+    );
+
+}
+
+function getRemainingExpenses(){
+
+  return getVisibleItems()
+    .filter(item =>
+      item.type === "expense" &&
+      !item.completed
+    )
+    .reduce(
+      (total,item)=>
+      total + item.amount,
+      0
+    );
+
+}
+
+function getCurrentCash(){
+
+  const view =
+    document.getElementById(
+      "viewSelector"
+    ).value;
+
+  if(view === "Household"){
+
+    return (
+
+      budgetData.accounts.booChecking +
+      budgetData.accounts.booSavings +
+
+      budgetData.accounts.stephenChecking +
+      budgetData.accounts.stephenSavings
+
+    );
+
+  }
+
+  if(view === "Boo"){
+
+    return (
+
+      budgetData.accounts.booChecking +
+      budgetData.accounts.booSavings
+
+    );
+
+  }
+
+  return (
+
+    budgetData.accounts.stephenChecking +
+    budgetData.accounts.stephenSavings
+
+  );
+
+}
+
+function renderForecasts(){
+
+  const currentCash =
+    getCurrentCash();
+
+  const incomeRemaining =
+    getRemainingIncome();
+
+  const expensesRemaining =
+    getRemainingExpenses();
+
+  const netFlow =
+    incomeRemaining -
+    expensesRemaining;
+
+  const projectedEnd =
+    currentCash +
+    netFlow -
+    budgetData.settings.forecastBuffer;
+
+  document.getElementById(
+    "nowCash"
+  ).textContent =
+    money(currentCash);
+
+  document.getElementById(
+    "nowIncome"
+  ).textContent =
+    money(incomeRemaining);
+
+  document.getElementById(
+    "nowExpenses"
+  ).textContent =
+    money(expensesRemaining);
+
+  document.getElementById(
+    "nowFlow"
+  ).textContent =
+    money(netFlow);
+
+  document.getElementById(
+    "nowMonthEnd"
+  ).textContent =
+    money(projectedEnd);
+
+  document.getElementById(
+    "projCash"
+  ).textContent =
+    money(currentCash);
+
+  document.getElementById(
+    "projIncome"
+  ).textContent =
+    money(incomeRemaining);
+
+  document.getElementById(
+    "projExpenses"
+  ).textContent =
+    money(expensesRemaining);
+
+  document.getElementById(
+    "projFlow"
+  ).textContent =
+    money(netFlow);
+
+  document.getElementById(
+    "projMonthEnd"
+  ).textContent =
+    money(projectedEnd);
+
+}
+
+/* =========================
+   RECONCILIATION
+========================= */
+
+function updateBalances(){
+
+  budgetData.accounts.booChecking =
+    Number(
+      document.getElementById(
+        "booCheckingInput"
+      ).value
+    ) || 0;
+
+  budgetData.accounts.booSavings =
+    Number(
+      document.getElementById(
+        "booSavingsInput"
+      ).value
+    ) || 0;
+
+  budgetData.accounts.stephenChecking =
+    Number(
+      document.getElementById(
+        "stephenCheckingInput"
+      ).value
+    ) || 0;
+
+  budgetData.accounts.stephenSavings =
+    Number(
+      document.getElementById(
+        "stephenSavingsInput"
+      ).value
+    ) || 0;
+
+  addActivity(
+    "Balances Reconciled"
+  );
+
+  renderAll();
+
+}
+
+function renderReconcile(){
+
+  const booChecking =
+    document.getElementById(
+      "booCheckingInput"
+    );
+
+  const booSavings =
+    document.getElementById(
+      "booSavingsInput"
+    );
+
+  const stephenChecking =
+    document.getElementById(
+      "stephenCheckingInput"
+    );
+
+  const stephenSavings =
+    document.getElementById(
+      "stephenSavingsInput"
+    );
+
+  if(!booChecking) return;
+
+  booChecking.value =
+    budgetData.accounts.booChecking;
+
+  booSavings.value =
+    budgetData.accounts.booSavings;
+
+  stephenChecking.value =
+    budgetData.accounts.stephenChecking;
+
+  stephenSavings.value =
+    budgetData.accounts.stephenSavings;
+
+}
   
 /* =========================
    RENDER ALL
@@ -1878,6 +2107,8 @@ function renderAll(){
   renderPaychecks();
   renderTimeline();
   renderLedger();
+  renderForecasts();
+  renderReconcile();
 
 }
 
@@ -1893,10 +2124,112 @@ document
 );
 
 /* =========================
+   PAYCHECK GENERATOR
+========================= */
+
+function addPaycheck(
+  owner*
+  amount,
+  date
+){
+
+  const id =*    `${owner}-${date}`;
+
+  const e*ists =
+    budgetData.timeline.som*(
+      item => item.id === id
+   *);
+
+  if(exists) return;
+
+  budget*ata.timeline.push({
+
+    id,
+
+    *wner,
+
+    type:"income",
+
+    des*:`${owner} Paycheck`,
+
+    amount,
+
+    date,
+
+    completed:false
+
+  });
+
+}
+
+/* =========================
+   BUILD PAYCHECKS
+========================= */
+
+function buildPaychecks(){
+
+  const booDates = [
+
+    "2026-09-10",
+    "2026-09-25",
+
+    "2026-10-10",
+    "2026-10-25",
+
+    "2026-11-10",
+    "2026-11-25",
+
+    "2026-12-10",
+    "2026-12-25"
+
+  ];
+
+  booDates.forEach(date=>{
+
+    addPaycheck(
+      "Boo",
+      3000,
+      date
+    );
+
+  });
+
+  const stephenDates = [
+
+    "2026-09-11",
+    "2026-09-25",
+
+    "2026-10-09",
+    "2026-10-23",
+
+    "2026-11-06",
+    "2026-11-20",
+
+    "2026-12-04",
+    "2026-12-18",
+    "2026-12-31"
+
+  ];
+
+  stephenDates.forEach(date=>{
+
+    addPaycheck(
+      "Stephen",
+      1364,
+      date
+    );
+
+  });
+
+}
+  
+/* =========================
    STARTUP
 ========================= */
 
 buildRecurringData();
+
+buildPaychecks();
 
 renderAll();
 
