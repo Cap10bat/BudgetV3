@@ -2159,6 +2159,90 @@ function renderForecasts(){
 
 }
 
+  function renderActivityLog(){
+
+  const container =
+    document.getElementById(
+      "activityContainer"
+    );
+
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  budgetData.activityLog.forEach(item=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "activity-item";
+
+    div.innerHTML = 
+
+      <strong>${item.date}</strong>
+
+      <br>
+
+      ${item.message}
+
+    ;
+
+    container.appendChild(div);
+
+  });
+
+}
+
+/* =========================
+   MONTHLY SUMMARY
+========================= */
+
+function renderMonthlySummary(){
+
+  const incomeReceived =
+    getIncomeReceived();
+
+  const billsPaid =
+    getBillsPaid();
+
+  const incomeRemaining =
+    getRemainingIncome();
+
+  const billsRemaining =
+    getRemainingExpenses();
+
+  const netRemaining =
+    incomeRemaining -
+    billsRemaining;
+
+  document.getElementById(
+    "summaryIncomeReceived"
+  ).textContent =
+    money(incomeReceived);
+
+  document.getElementById(
+    "summaryIncomeRemaining"
+  ).textContent =
+    money(incomeRemaining);
+
+  document.getElementById(
+    "summaryBillsPaid"
+  ).textContent =
+    money(billsPaid);
+
+  document.getElementById(
+    "summaryBillsRemaining"
+  ).textContent =
+    money(billsRemaining);
+
+  document.getElementById(
+    "summaryNetRemaining"
+  ).textContent =
+    money(netRemaining);
+
+}  
+
 /* =========================
    RECONCILIATION
 ========================= */
@@ -2252,6 +2336,8 @@ function renderAll(){
   renderLedger();
   renderForecasts();
   renderReconcile();
+  renderActivityLog();
+  renderMonthlySummary();
 
 }
 
