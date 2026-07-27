@@ -451,36 +451,19 @@ let currentView = "Household";
 
 let currentMode = "NOW";
 
-function switchView(view){
-
-  currentView = view;
+function updateViewLabel(){
 
   let label = "🏠 Household View";
 
-  if(view === "Boo"){
+  if(currentView === "Boo"){
     label = "👻 Boo View";
   }
 
-  if(view === "Stephen"){
+  if(currentView === "Stephen"){
     label = "🏴‍☠️ Stephen View";
   }
 
-  document.getElementById(
-    "viewLabel"
-  ).innerText = label;
-
-}
-
-function switchMode(mode){
-
-  currentMode = mode;
-
-  let label =
-    document.getElementById(
-      "viewLabel"
-    ).innerText;
-
-  if(mode === "PROJECTED"){
+  if(currentMode === "PROJECTED"){
     label += " • Projected";
   }
 
@@ -490,7 +473,112 @@ function switchMode(mode){
 
 }
 
+function switchView(view){
 
+  currentView = view;
+
+  updateViewLabel();
+
+  testView();
+
+}
+
+
+function switchMode(mode){
+
+  currentMode = mode;
+
+  updateViewLabel();
+
+  testView();
+
+}
+
+let budgetData = {
+
+  timeline:[],
+
+  goals:[],
+
+  settings:{}
+
+};
+
+budgetData.timeline = [
+
+{
+  date:"2026-07-31",
+  owner:"Stephen",
+  type:"income",
+  desc:"Stephen Paycheck",
+  amount:1364
+},
+
+{
+  date:"2026-07-31",
+  owner:"Stephen",
+  type:"expense",
+  desc:"Car Note",
+  amount:550
+},
+
+{
+  date:"2026-07-26",
+  owner:"Boo",
+  type:"expense",
+  desc:"Klarna",
+  amount:300
+},
+
+{
+  date:"2026-08-01",
+  owner:"Household",
+  type:"expense",
+  desc:"Rent",
+  amount:2000
+},
+
+{
+  date:"2026-08-10",
+  owner:"Boo",
+  type:"income",
+  desc:"Boo Paycheck",
+  amount:3000
+}
+
+];
+
+function testView(){
+
+  console.log(
+
+    "Current View:",
+    currentView,
+
+    getVisibleItems()
+
+  );
+
+}
+  
+function getVisibleItems(){
+
+  if(currentView === "Household"){
+    return budgetData.timeline;
+  }
+
+  return budgetData.timeline.filter(
+    item =>
+
+      item.owner === currentView ||
+
+      item.owner === "Household"
+
+  );
+
+}
+testView(); 
+  
 </script>
   
 </div>
