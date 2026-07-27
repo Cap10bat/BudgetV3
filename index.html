@@ -953,7 +953,10 @@ Create a portable backup and sync file.
 
 <br>
 
-<button class="btn">
+<button
+  class="btn"
+  onclick="exportBudget()"
+>
 Export Budget
 </button>
 
@@ -969,7 +972,11 @@ Merge updates without replacing data.
 
 <br>
 
-<input type="file">
+<input
+  type="file"
+  id="importFile"
+  onchange="importBudget(event)"
+>
 
 </div>
 
@@ -1842,6 +1849,8 @@ function toggleItem(id){
 
   );
 
+  saveData();
+
   renderAll();
 
 }
@@ -2197,20 +2206,91 @@ ${item.message}
    MONTHLY SUMMARY
 ========================= */
 
+function getCurrentMonthItems(){
+
+  const currentMonth =
+    new Date().getMonth() + 1;
+
+  return getVisibleItems().filter(item => {
+
+    const itemMonth =
+      new Date(item.date).getMonth() + 1;
+
+    return itemMonth === currentMonth;
+
+  });
+
+}
+
+function getMonthIncomeReceived(){
+
+  return getCurrentMonthItems()
+    .filter(item =>
+      item.type === "income" &&
+      item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+
+function getMonthIncomeRemaining(){
+
+  return getCurrentMonthItems()
+    .filter(item =>
+      item.type === "income" &&
+      !item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+
+function getMonthBillsPaid(){
+
+  return getCurrentMonthItems()
+    .filter(item =>
+      item.type === "expense" &&
+      item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+
+function getMonthBillsRemaining(){
+
+  return getCurrentMonthItems()
+    .filter(item =>
+      item.type === "expense" &&
+      !item.completed
+    )
+    .reduce(
+      (sum,item)=>sum + item.amount,
+      0
+    );
+
+}
+  
 function renderMonthlySummary(){
 
-  const incomeReceived =
-    getIncomeReceived();
+ const incomeReceived =
+  getMonthIncomeReceived();
 
-  const billsPaid =
-    getBillsPaid();
+const billsPaid =
+  getMonthBillsPaid();
 
-  const incomeRemaining =
-    getRemainingIncome();
+const incomeRemaining =
+  getMonthIncomeRemaining();
 
-  const billsRemaining =
-    getRemainingExpenses();
-
+const billsRemaining =
+  getMonthBillsRemaining();
   const netRemaining =
     incomeRemaining -
     billsRemaining;
@@ -2242,6 +2322,71 @@ function renderMonthlySummary(){
 
 }  
 
+/* =========================
+   GOALS
+========================= */
+
+function renderGoals(){
+
+  const container =
+    document.getElementById(
+      "goalContainer"
+    );
+
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  if(
+    budgetData.goals.length === 0
+  ){
+
+    container.innerHTML = `
+
+      <div class="goal-card">
+        No goals created yet.
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+  budgetData.goals.forEach(goal=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "goal-card";
+
+    div.innerHTML = `
+
+      <h3>${goal.name}</h3>
+
+      <p>
+        Current:
+        ${money(goal.current)}
+      </p>
+
+      <p>
+        Target:
+        ${money(goal.target)}
+      </p>
+
+      <p>
+        ${goal.notes || ""}
+      </p>
+
+    `;
+
+    container.appendChild(div);
+
+  });
+
+}
+  
 /* =========================
    RECONCILIATION
 ========================= */
@@ -2280,6 +2425,8 @@ function updateBalances(){
     "Balances Reconciled"
   );
 
+saveData();
+  
   renderAll();
 
 }
@@ -2321,6 +2468,154 @@ function renderReconcile(){
     budgetData.accounts.stephenSavings;
 
 }
+
+function importBudget(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(e){
+
+    const imported =
+      JSON.parse(
+        e.target.result
+      );
+
+    if(imported.accounts){
+
+      budgetData.accounts =
+        imported.accounts;
+
+    }
+
+    if(imported.goals){
+
+      budgetData.goals =
+        imported.goals;
+
+    }
+
+    if(imported.activityLog){
+
+      budgetData.activityLog =
+        imported.activityLog;
+
+    }
+
+    if(imported.timeline){
+
+      imported.timeline.forEach(
+        incoming=>{
+
+          const exists =
+            budgetData.timeline.some(
+              current =>
+                current.id === incoming.id
+            );
+
+          if(!exists){
+
+            budgetData.timeline.push(
+              incoming
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+    addActivity(
+      "Budget Imported"
+    );
+
+    saveData();
+
+    renderAll();
+
+  };
+
+  reader.readAsText(file);
+
+}
+  
+function exportBudget(){
+
+  const data =
+    JSON.stringify(
+      budgetData,
+      null,
+      2
+    );
+
+  const blob =
+    new Blob(
+      [data],
+      {
+        type:"application/json"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "etheridge-financial.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+  addActivity(
+    "Budget Exported"
+  );
+
+}
+  
+/* =========================
+   SAVE / LOAD
+========================= */
+
+function saveData(){
+
+  localStorage.setItem(
+    "etheridgeFinancial",
+    JSON.stringify(budgetData)
+  );
+
+}
+
+function loadData(){
+
+  const saved =
+    localStorage.getItem(
+      "etheridgeFinancial"
+    );
+
+  if(saved){
+
+    const data =
+      JSON.parse(saved);
+
+    Object.assign(
+      budgetData,
+      data
+    );
+
+  }
+
+}
   
 /* =========================
    RENDER ALL
@@ -2337,6 +2632,7 @@ function renderAll(){
   renderReconcile();
   renderActivityLog();
   renderMonthlySummary();
+  renderGoals();
 
 }
 
@@ -2456,11 +2752,14 @@ function buildPaychecks(){
    STARTUP
 ========================= */
 
+loadData();
+
 buildRecurringData();
 
 buildPaychecks();
 
 renderAll();
+
 
 </script>
 
