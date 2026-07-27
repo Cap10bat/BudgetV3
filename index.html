@@ -2178,16 +2178,15 @@ function renderForecasts(){
     div.className =
       "activity-item";
 
-    div.innerHTML = 
+   div.innerHTML = `
 
-      <strong>${item.date}</strong>
+<strong>${item.date}</strong>
 
-      <br>
+<br>
 
-      ${item.message}
+${item.message}
 
-    ;
-
+`;
     container.appendChild(div);
 
   });
