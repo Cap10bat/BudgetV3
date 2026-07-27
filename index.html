@@ -1432,6 +1432,305 @@ function renderDashboard(){
    APP STARTUP
 ========================= */
 
+/* =========================
+   TIMELINE FILTER
+========================= */
+
+function getVisibleItems(){
+
+  const view =
+    document.getElementById("viewSelector").value;
+
+  if(view === "Household"){
+    return budgetData.timeline;
+  }
+
+  return budgetData.timeline.filter(item => {
+
+    return (
+      item.owner === "Household" ||
+      item.owner === view
+    );
+
+  });
+
+}
+
+/* =========================
+   COMING UP
+========================= */
+
+function renderComingUp(){
+
+  const table =
+    document.getElementById("comingUpTable");
+
+  if(!table) return;
+
+  table.innerHTML = "";
+
+  const items =
+    getVisibleItems()
+    .filter(item => !item.completed)
+    .sort(
+      (a,b)=>
+      new Date(a.date) -
+      new Date(b.date)
+    );
+
+  items.forEach(item => {
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML = `
+
+      <td>
+
+        <input
+          type="checkbox"
+          class="big-check"
+          onchange="toggleItem('${item.id}')"
+        >
+
+      </td>
+
+      <td>${item.date}</td>
+
+      <td>${item.desc}</td>
+
+      <td>${item.owner}</td>
+
+      <td>
+        ${item.type==="expense"?"-":"+"}
+        ${money(item.amount)}
+      </td>
+
+    `;
+
+    table.appendChild(row);
+
+  });
+
+}
+
+/* =========================
+   PAYCHECKS
+========================= */
+
+function renderPaychecks(){
+
+  const table =
+    document.getElementById("paycheckTable");
+
+  if(!table) return;
+
+  table.innerHTML = "";
+
+  const checks =
+    getVisibleItems()
+    .filter(item =>
+      item.type === "income"
+    )
+    .sort(
+      (a,b)=>
+      new Date(a.date) -
+      new Date(b.date)
+    );
+
+  checks.forEach(item => {
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML = `
+
+      <td>
+
+        <input
+          type="checkbox"
+          class="big-check"
+          ${item.completed?"checked":""}
+          onchange="toggleItem('${item.id}')"
+        >
+
+      </td>
+
+      <td>${item.date}</td>
+
+      <td>${item.owner}</td>
+
+      <td>${item.desc}</td>
+
+      <td>${money(item.amount)}</td>
+
+    `;
+
+    table.appendChild(row);
+
+  });
+
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+function renderTimeline(){
+
+  const container =
+    document.getElementById(
+      "timelineContainer"
+    );
+
+  if(!container) return;
+
+  container.innerHTML = "";
+
+  const items =
+    getVisibleItems()
+    .filter(item => !item.completed)
+    .sort(
+      (a,b)=>
+      new Date(a.date) -
+      new Date(b.date)
+    );
+
+  items.forEach(item=>{
+
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "activity-item";
+
+    card.innerHTML = `
+
+      <strong>${item.date}</strong>
+
+      <br>
+
+      ${item.desc}
+
+      <br>
+
+      ${item.owner}
+
+      <br>
+
+      ${money(item.amount)}
+
+    `;
+
+    container.appendChild(card);
+
+  });
+
+}
+
+/* =========================
+   LEDGER
+========================= */
+
+function renderLedger(){
+
+  const table =
+    document.getElementById(
+      "ledgerTable"
+    );
+
+  if(!table) return;
+
+  table.innerHTML = "";
+
+  const completedItems =
+    getVisibleItems()
+    .filter(item =>
+      item.completed
+    );
+
+  completedItems.forEach(item=>{
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML = `
+
+      <td>${item.date}</td>
+
+      <td>${item.desc}</td>
+
+      <td>${item.owner}</td>
+
+      <td>${money(item.amount)}</td>
+
+      <td>✅ Complete</td>
+
+    `;
+
+    table.appendChild(row);
+
+  });
+
+}
+
+/* =========================
+   COMPLETE ITEM
+========================= */
+
+function toggleItem(id){
+
+  const item =
+    budgetData.timeline.find(
+      x => x.id === id
+    );
+
+  if(!item) return;
+
+  item.completed =
+    !item.completed;
+
+  addActivity(
+
+    `${item.desc} marked ${item.completed ? "completed" : "pending"}`
+
+  );
+
+  renderAll();
+
+}
+
+/* =========================
+   RENDER ALL
+========================= */
+
+function renderAll(){
+
+  renderDashboard();
+  renderComingUp();
+  renderPaychecks();
+  renderTimeline();
+  renderLedger();
+
+}
+
+/* =========================
+   VIEW CHANGE
+========================= */
+
+document
+.getElementById("viewSelector")
+.addEventListener(
+  "change",
+  renderAll
+);
+
+/* =========================
+   STARTUP
+========================= */
+
+renderAll();
+  
 renderDashboard();
 
 </script>
