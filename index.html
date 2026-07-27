@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Etheridge Financial Forecast V3</title>
 
 <style>
@@ -16,17 +17,18 @@
   --red:#b91c1c;
   --blue:#2563eb;
   --gold:#b45309;
-  --border:#e2e8f0;
+  --border:#dbe2ea;
 }
 
 *{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
 body{
-  margin:0;
-  font-family:"Segoe UI",system-ui,sans-serif;
   background:var(--bg);
+  font-family:"Segoe UI",system-ui,sans-serif;
   color:#222;
 }
 
@@ -36,7 +38,7 @@ body{
 }
 
 .sidebar{
-  width:260px;
+  width:240px;
   background:linear-gradient(
     180deg,
     #2e1065,
@@ -47,9 +49,9 @@ body{
 }
 
 .logo{
-  font-size:28px;
+  font-size:34px;
   font-weight:800;
-  margin-bottom:30px;
+  margin-bottom:25px;
 }
 
 .menu-item{
@@ -57,11 +59,16 @@ body{
   border-radius:12px;
   margin-bottom:10px;
   background:rgba(255,255,255,.08);
+  cursor:pointer;
+}
+
+.menu-item:hover{
+  background:rgba(255,255,255,.15);
 }
 
 .main{
   flex:1;
-  padding:25px;
+  padding:24px;
 }
 
 .hero{
@@ -74,9 +81,9 @@ body{
 }
 
 h1{
-  margin:0;
-  font-size:46px;
+  font-size:48px;
   color:var(--primary);
+  font-weight:800;
 }
 
 .subtitle{
@@ -85,33 +92,30 @@ h1{
 }
 
 .view-label{
-  margin-top:10px;
+  margin-top:12px;
   font-weight:700;
   color:var(--primary);
-  font-size:14px;
 }
-  
+
 .toggle-row{
   display:flex;
-  gap:10px;
   flex-wrap:wrap;
-  margin-top:20px;
+  gap:10px;
+  margin-top:18px;
 }
 
 .pill{
-  padding:10px 16px;
   border:none;
   border-radius:999px;
+  padding:10px 16px;
+  color:white;
   cursor:pointer;
-
+  font-weight:600;
   background:linear-gradient(
     90deg,
     #4c1d95,
     #6d28d9
   );
-
-  color:white;
-  font-weight:600;
 }
 
 .dashboard{
@@ -131,8 +135,8 @@ h1{
 
 .card-title{
   font-size:12px;
-  text-transform:uppercase;
   font-weight:700;
+  text-transform:uppercase;
   letter-spacing:.5px;
   color:#6b7280;
 }
@@ -159,7 +163,12 @@ h1{
   background:#fffbeb;
 }
 
-  .coming-item{
+h2{
+  margin-bottom:18px;
+  color:var(--primary);
+}
+
+ .coming-item{
   display:flex;
   justify-content:space-between;
   align-items:center;
@@ -169,12 +178,7 @@ h1{
 
 .coming-item:last-child{
   border-bottom:none;
-}
-
-h2{
-  margin-top:0;
-  color:var(--primary);
-}
+} 
 
 @media(max-width:900px){
 
@@ -202,11 +206,15 @@ h2{
 </div>
 
 <div class="menu-item">🏠 Dashboard</div>
-<div class="menu-item">📖 Ledger</div>
-<div class="menu-item">📅 Timeline</div>
+<div class="menu-item">📌 Coming Up</div>
 <div class="menu-item">💰 Paychecks</div>
+<div class="menu-item">📈 Forecasts</div>
+<div class="menu-item">📊 Monthly Summary</div>
+<div class="menu-item">📅 Timeline</div>
+<div class="menu-item">📖 Ledger</div>
 <div class="menu-item">🎯 Goals</div>
 <div class="menu-item">✅ Reconciliation</div>
+<div class="menu-item">⚙️ Settings</div>
 
 </div>
 
@@ -222,12 +230,10 @@ h2{
 Household Budget • Forecasting • Financial Planning
 </div>
 
-
-  
 <div id="viewLabel" class="view-label">
 🏠 Household View
 </div>
-  
+
 <div class="toggle-row">
 
 <button
@@ -274,8 +280,8 @@ PROJECTED
 <div class="card-title">
 Available To Spend
 </div>
-<div class="card-value">
-$1,421
+<div id="availableToSpend" class="card-value">
+$0
 </div>
 </div>
 
@@ -283,8 +289,8 @@ $1,421
 <div class="card-title">
 Due Before Income
 </div>
-<div class="card-value">
-$159
+<div id="dueBeforeIncome" class="card-value">
+$0
 </div>
 </div>
 
@@ -292,8 +298,8 @@ $159
 <div class="card-title">
 Combined Cash
 </div>
-<div class="card-value">
-$1,580
+<div id="combinedCash" class="card-value">
+$0
 </div>
 </div>
 
@@ -301,14 +307,14 @@ $1,580
 <div class="card-title">
 This Month Remaining
 </div>
-<div class="card-value">
-$4,792
+<div id="monthRemaining" class="card-value">
+$0
 </div>
 </div>
 
 </div>
 
-<div class="hero" style="margin-top:20px;">
+<div class="hero">
 
 <h2>📌 Coming Up</h2>
 
@@ -338,10 +344,11 @@ $4,792
   <strong style="color:var(--red);">
     -$2,000
   </strong>
-  
 </div>
 
-<div class="hero" style="margin-top:20px;">
+</div>
+
+<div class="hero">
 
 <h2>📈 Forecasts</h2>
 
@@ -379,41 +386,43 @@ $4,792
 
 </div>
 
-<div class="hero" style="margin-top:20px;">
+</div>
+
+<div class="hero">
 
 <h2>💰 Paychecks</h2>
 
 <div class="coming-item">
 
-  <span>
-    🏴‍☠️ Stephen Paycheck
-    <br>
-    <small>July 31, 2026</small>
-  </span>
+<span>
+🏴‍☠️ Stephen Paycheck
+<br>
+<small>July 31, 2026</small>
+</span>
 
-  <strong style="color:var(--green);">
-    +$1,364
-  </strong>
+<strong style="color:var(--green);">
++$1,364
+</strong>
 
 </div>
 
 <div class="coming-item">
 
-  <span>
-    👻 Boo Paycheck
-    <br>
-    <small>August 10, 2026</small>
-  </span>
+<span>
+👻 Boo Paycheck
+<br>
+<small>August 10, 2026</small>
+</span>
 
-  <strong style="color:var(--green);">
-    +$3,000
-  </strong>
-
-</div>
+<strong style="color:var(--green);">
++$3,000
+</strong>
 
 </div>
 
-<div class="hero" style="margin-top:20px;">
+</div>
+
+<div class="hero">
 
 <h2>📊 Monthly Summary</h2>
 
@@ -436,21 +445,64 @@ $4,792
 
 </div>
 
-</div>  
-  
 </div>
 
-  
-</div>
-  
-</div>
+  </div>
 
 <script>
 
 let currentView = "Household";
-
 let currentMode = "NOW";
 
+let budgetData = {
+
+  timeline:[
+
+    {
+      date:"2026-07-31",
+      owner:"Stephen",
+      type:"income",
+      desc:"Stephen Paycheck",
+      amount:1364
+    },
+
+    {
+      date:"2026-07-31",
+      owner:"Stephen",
+      type:"expense",
+      desc:"Car Note",
+      amount:550
+    },
+
+    {
+      date:"2026-07-26",
+      owner:"Boo",
+      type:"expense",
+      desc:"Klarna",
+      amount:300
+    },
+
+    {
+      date:"2026-08-01",
+      owner:"Household",
+      type:"expense",
+      desc:"Rent",
+      amount:2000
+    },
+
+    {
+      date:"2026-08-10",
+      owner:"Boo",
+      type:"income",
+      desc:"Boo Paycheck",
+      amount:3000
+    }
+
+  ]
+
+};
+
+  
 function updateViewLabel(){
 
   let label = "🏠 Household View";
@@ -481,8 +533,9 @@ function switchView(view){
 
   testView();
 
-}
+  renderDashboard();
 
+}
 
 function switchMode(mode){
 
@@ -492,76 +545,11 @@ function switchMode(mode){
 
   testView();
 
-}
-
-let budgetData = {
-
-  timeline:[],
-
-  goals:[],
-
-  settings:{}
-
-};
-
-budgetData.timeline = [
-
-{
-  date:"2026-07-31",
-  owner:"Stephen",
-  type:"income",
-  desc:"Stephen Paycheck",
-  amount:1364
-},
-
-{
-  date:"2026-07-31",
-  owner:"Stephen",
-  type:"expense",
-  desc:"Car Note",
-  amount:550
-},
-
-{
-  date:"2026-07-26",
-  owner:"Boo",
-  type:"expense",
-  desc:"Klarna",
-  amount:300
-},
-
-{
-  date:"2026-08-01",
-  owner:"Household",
-  type:"expense",
-  desc:"Rent",
-  amount:2000
-},
-
-{
-  date:"2026-08-10",
-  owner:"Boo",
-  type:"income",
-  desc:"Boo Paycheck",
-  amount:3000
-}
-
-];
-
-function testView(){
-
-  console.log(
-
-    "Current View:",
-    currentView,
-
-    getVisibleItems()
-
-  );
+  renderDashboard();
 
 }
-  
-function getVisibleItems(){
+
+ function getVisibleItems(){
 
   if(currentView === "Household"){
     return budgetData.timeline;
@@ -577,11 +565,67 @@ function getVisibleItems(){
   );
 
 }
-testView(); 
+
+  function testView(){
+
+  console.log(
+    "Current View:",
+    currentView
+  );
+
+  console.log(
+    getVisibleItems()
+  );
+
+}
+  function renderDashboard(){
+
+  const items =
+    getVisibleItems();
+
+  let income = 0;
+  let expenses = 0;
+
+  items.forEach(item => {
+
+    if(item.type === "income"){
+      income += item.amount;
+    }
+
+    if(item.type === "expense"){
+      expenses += item.amount;
+    }
+
+  });
+
+  document.getElementById(
+    "combinedCash"
+  ).innerText =
+    "$" + (income - expenses).toLocaleString();
+
+  document.getElementById(
+    "availableToSpend"
+  ).innerText =
+    "$" + (income - expenses).toLocaleString();
+
+  document.getElementById(
+    "dueBeforeIncome"
+  ).innerText =
+    "$" + expenses.toLocaleString();
+
+  document.getElementById(
+    "monthRemaining"
+  ).innerText =
+    "$" + income.toLocaleString();
+
+}
+
+testView();
+
+renderDashboard();
+
   
 </script>
-  
-</div>
 
 </body>
 </html>
