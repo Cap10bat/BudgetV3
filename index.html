@@ -1701,6 +1701,173 @@ function toggleItem(id){
 }
 
 /* =========================
+   RECURRING GENERATOR
+========================= */
+
+function addRecurringEvent(
+  owner,
+  type,
+  desc,
+  amount,
+  dueDay,
+  startMonth = 8,
+  endMonth = 12
+){
+
+  for(let month=startMonth; month<=endMonth; month++){
+
+    const mm =
+      String(month).padStart(2,'0');
+
+    const dd =
+      String(dueDay).padStart(2,'0');
+
+    const id =
+      `${desc}-${month}`;
+
+    const exists =
+      budgetData.timeline.some(
+        item => item.id === id
+      );
+
+    if(exists) continue;
+
+    budgetData.timeline.push({
+
+      id,
+
+      owner,
+
+      type,
+
+      desc,
+
+      amount,
+
+      date:`2026-${mm}-${dd}`,
+
+      completed:false
+
+    });
+
+  }
+
+}
+
+/* =========================
+   BUILD YEAR
+========================= */
+
+function buildRecurringData(){
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Rent",
+    1900,
+    25
+  );
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Phone",
+    231,
+    25
+  );
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Water",
+    52,
+    25
+  );
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Internet",
+    70,
+    22
+  );
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Insurance",
+    650,
+    10
+  );
+
+  addRecurringEvent(
+    "Household",
+    "expense",
+    "Groceries",
+    250,
+    15
+  );
+
+  addRecurringEvent(
+    "Boo",
+    "expense",
+    "Car Payment",
+    700,
+    10
+  );
+
+  addRecurringEvent(
+    "Boo",
+    "expense",
+    "Credit Card",
+    300,
+    10
+  );
+
+  addRecurringEvent(
+    "Boo",
+    "expense",
+    "Klarna",
+    300,
+    25
+  );
+
+  addRecurringEvent(
+    "Stephen",
+    "expense",
+    "Car Payment",
+    550,
+    18
+  );
+
+  addRecurringEvent(
+    "Stephen",
+    "expense",
+    "Loan",
+    159,
+    15
+  );
+
+  addRecurringEvent(
+    "Stephen",
+    "expense",
+    "Credit Card",
+    50,
+    15
+  );
+
+  addRecurringEvent(
+    "Stephen",
+    "expense",
+    "Transfer To Boo",
+    530,
+    14
+  );
+
+}
+
+  
+/* =========================
    RENDER ALL
 ========================= */
 
@@ -1728,6 +1895,8 @@ document
 /* =========================
    STARTUP
 ========================= */
+
+buildRecurringData();
 
 renderAll();
 
