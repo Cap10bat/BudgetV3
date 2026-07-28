@@ -1540,14 +1540,16 @@ function renderDashboard(){
   const combinedCash =
     getCurrentCash();
 
-  const remainingExpenses =
-    getRemainingExpenses();
+ const remainingExpenses =
+  getMonthBillsRemaining();
 
-  const remainingIncome =
-    getRemainingIncome();
+const remainingIncome =
+  getMonthIncomeRemaining();
 
   const available =
-    getAvailableToSpend();
+  combinedCash +
+  remainingIncome -
+  remainingExpenses;
 
   document.getElementById(
     "combinedCash"
@@ -2207,8 +2209,8 @@ ${item.message}
 ========================= */
 
 function getCurrentMonthItems(){
-
-  const currentMonth = 8;
+  const currentMonth =
+    new Date().getMonth() + 1;
 
   return getVisibleItems().filter(item => {
 
