@@ -2208,18 +2208,23 @@ ${item.message}
    MONTHLY SUMMARY
 ========================= */
 
+function getBudgetMonth(){
+    return 8;
+}
+
 function getCurrentMonthItems(){
-  const currentMonth =
-    new Date().getMonth() + 1;
 
-  return getVisibleItems().filter(item => {
+    const currentMonth =
+        getBudgetMonth();
 
-    const itemMonth =
-      new Date(item.date).getMonth() + 1;
+    return getVisibleItems().filter(item => {
 
-    return itemMonth === currentMonth;
+        const itemMonth =
+            new Date(item.date).getMonth() + 1;
 
-  });
+        return itemMonth === currentMonth;
+
+    });
 
 }
 
