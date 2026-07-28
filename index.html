@@ -1126,25 +1126,42 @@ Export Budget
 
 </div>
 
+
 <div class="card">
 
-<h3>📥 Import Budget</h3>
+  <h3>🔄 Merge Budget</h3>
 
-<p>
-Merge updates without replacing data.
-</p>
+  <p>
+    Merge updates without replacing data
+  </p>
 
-<br>
+  <br>
 
-<input
-  type="file"
-  id="importFile"
-  onchange="importBudget(event)"
->
+  <input
+    type="file"
+    id="importFile"
+    onchange="importBudget(event)"
+  >
 
 </div>
 
 <div class="card">
+
+  <h3>📥 Restore Budget</h3>
+
+  <p>
+    Replace all current data
+  </p>
+
+  <br>
+
+  <input
+    type="file"
+    accept=".json"
+    onchange="restoreBudget(event)"
+  >
+
+</div>
 
 <h3>🔮 Forecast Buffer</h3>
 
@@ -3039,6 +3056,53 @@ function importBudget(event){
   reader.readAsText(file);
 
 }
+
+function restoreBudget(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(e){
+
+    const imported =
+      JSON.parse(
+        e.target.result
+      );
+
+    budgetData.accounts =
+      imported.accounts || {};
+
+    budgetData.settings =
+      imported.settings || {};
+
+    budgetData.goals =
+      imported.goals || [];
+
+    budgetData.activityLog =
+      imported.activityLog || [];
+
+    budgetData.timeline =
+      imported.timeline || [];
+
+    addActivity(
+      "Budget Restored"
+    );
+
+    saveData();
+
+    renderAll();
+
+  };
+
+  reader.readAsText(file);
+
+}
+
   
 function exportBudget(){
 
