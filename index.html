@@ -188,7 +188,7 @@ function*getAvailableToSpend(){
 
 .dashboard-grid{
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
   gap:16px;
 }
 
@@ -197,6 +197,7 @@ function*getAvailableToSpend(){
   border:1px solid var(--border);
   border-radius:18px;
   padding:18px;
+  overflow:hidden;
 }
 
 .card h3{
@@ -208,6 +209,7 @@ function*getAvailableToSpend(){
 .card-value{
   font-size:2rem;
   font-weight:700;
+  word-break:break-word;
 }
 
 .green{
@@ -230,6 +232,7 @@ function*getAvailableToSpend(){
 
 .page{
   display:none;
+  padding:16px;
 }
 
 .page.active{
@@ -263,6 +266,30 @@ td{
 
 tr:hover{
   background:#212d44;
+}
+    @media (max-width:768px){
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .card-value{
+    font-size:1.75rem;
+  }
+
+  table{
+    font-size:.85rem;
+  }
+
+  td,
+  th{
+    padding:8px;
+  }
+
 }
 
 /* CHECKBOX */
@@ -401,11 +428,34 @@ textarea{
 
   .sidebar{
     width:100%;
+    overflow-y:auto;
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
   }
 
   .forecast-grid{
     grid-template-columns:1fr;
   }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .card-value{
+    font-size:1.75rem;
+  }
+
+  table{
+    font-size:.85rem;
+  }
+
+  td,
+  th{
+    padding:8px;
+  }
+
 }
 
 </style>
