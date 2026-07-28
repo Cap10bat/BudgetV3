@@ -2793,7 +2793,7 @@ function renderGoals(){
   div.className =
     "goal-card";
 
-  div.innerHTML = `
+ div.innerHTML = `
 
     <h3>${goal.name}</h3>
 
@@ -2828,24 +2828,25 @@ function renderGoals(){
 
     </div>
 
+    <br>
+
+    <button
+      class="btn"
+      onclick="editGoal('${goal.name}')"
+    >
+      Edit Goal
+    </button>
+
+    &nbsp;
+
+    <button
+      class="btn btn-danger"
+      onclick="deleteGoal('${goal.name}')"
+    >
+      Delete Goal
+    </button>
+
   `;
-
-<br>
-<button
-  class="btn"
-  onclick="editGoal('${goal.name}')"
->
-  Edit Goal
-</button>
-
-&nbsp;
-  
-<button
-  class="btn btn-danger"
-  onclick="deleteGoal('${goal.name}')"
->
-  Delete Goal
-</button>
    
   container.appendChild(div);
 
