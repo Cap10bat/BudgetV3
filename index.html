@@ -2691,6 +2691,11 @@ function loadData(){
       data
     );
 
+document.getElementById(
+  "modeSelector"
+).value =
+  budgetData.settings.currentMode || "NOW";    
+
   }
 
 }
@@ -2722,6 +2727,22 @@ document
 
     budgetData.settings.currentMode =
       this.value;
+
+    saveData();
+
+    renderAll();
+
+  }
+);
+
+  document
+.getElementById("forecastBuffer")
+.addEventListener(
+  "change",
+  function(){
+
+    budgetData.settings.forecastBuffer =
+      Number(this.value);
 
     saveData();
 
