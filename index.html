@@ -528,7 +528,7 @@ $0
 </div>
 
 <div class="card">
-<h3>⚠️ Due Before Income</h3>
+<h3>⚠️ Due Before Next Paycheck</h3>
 <div class="card-value orange" id="dueBeforeIncome">
 $0
 </div>
@@ -1574,11 +1574,15 @@ function renderDashboard(){
   const combinedCash =
     getCurrentCash();
 
- const remainingExpenses =
-  getMonthBillsRemaining();
+const remainingExpenses =
+  budgetData.settings.currentMode === "PROJECTED"
+    ? getRemainingExpenses()
+    : getMonthBillsRemaining();
 
 const remainingIncome =
-  getMonthIncomeRemaining();
+  budgetData.settings.currentMode === "PROJECTED"
+    ? getRemainingIncome()
+    : getMonthIncomeRemaining();
   
 const monthRemaining =
     remainingIncome -
@@ -2710,6 +2714,22 @@ function renderAll(){
 
 }
 
+document
+.getElementById("modeSelector")
+.addEventListener(
+  "change",
+  function(){
+
+    budgetData.settings.currentMode =
+      this.value;
+
+    saveData();
+
+    renderAll();
+
+  }
+);
+  
 /* =========================
    VIEW CHANGE
 ========================= */
