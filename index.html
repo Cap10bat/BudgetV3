@@ -531,6 +531,10 @@ $0
   <p id="cashRunway">
   Calculating...
 </p>
+<p id="bufferStatus">
+  Buffer Status
+</p>
+  
 </div>
 
 <div class="card">
@@ -568,6 +572,38 @@ $0
 </div>
 </div>
 
+<div class="card">
+
+  <h3>💰 Next Income</h3>
+
+  <div
+    class="card-value green"
+    id="nextIncomeAmount"
+    style="font-size:1.3rem;"
+  >
+    $0
+  </div>
+
+  <p id="nextIncomeDate">
+    No income scheduled
+  </p>
+
+</div>
+  
+<div class="card">
+
+  <h3>🕒 Last Updated</h3>
+
+  <div
+    class="card-value"
+    id="lastUpdated"
+    style="font-size:1rem;"
+  >
+    Never
+  </div>
+
+</div>
+  
 </div>
 
 </div>
@@ -1516,6 +1552,9 @@ function addActivity(message){
 
   });
 
+  budgetData.settings.lastUpdated =
+  timestamp;
+
 }
 
 function getCombinedCash(){
@@ -1604,6 +1643,24 @@ function getDueBeforeNextIncome(){
       sum + item.amount,
       0
     );
+
+}
+
+function getNextIncome(){
+
+  const incomes =
+    getVisibleItems()
+      .filter(item =>
+        item.type === "income" &&
+        !item.completed
+      )
+      .sort(
+        (a,b) =>
+          new Date(a.date) -
+          new Date(b.date)
+      );
+
+  return incomes[0] || null;
 
 }
   
@@ -1717,6 +1774,22 @@ const runwayDays =
       )
 
     : 30;
+
+  const bufferGap =
+  available -
+  Number(
+    budgetData.settings.forecastBuffer || 0
+  );
+
+document.getElementById(
+  "bufferStatus"
+).textContent =
+
+  bufferGap >= 0
+
+    ? `✅ ${money(bufferGap)} Above Buffer`
+
+    : `⚠️ ${money(Math.abs(bufferGap))} Below Buffer`;
   
  document.getElementById(
     "combinedCash"
@@ -1814,7 +1887,32 @@ document.getElementById(
     "billsPaid"
   ).textContent =
     money(getBillsPaid());
+  
+  document.getElementById(
+  "lastUpdated"
+).textContent =
+  budgetData.settings.lastUpdated ||
+  "Never";
 
+const nextIncome =
+  getNextIncome();
+
+document.getElementById(
+  "nextIncomeAmount"
+).textContent =
+
+  nextIncome
+    ? money(nextIncome.amount)
+    : "$0";
+
+document.getElementById(
+  "nextIncomeDate"
+).textContent =
+
+  nextIncome
+    ? `${nextIncome.owner} • ${nextIncome.date}`
+    : "No income scheduled";
+  
 }
 
 /* =========================
