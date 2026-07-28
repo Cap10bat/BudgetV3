@@ -525,6 +525,12 @@ Financial snapshot of the household.
 <div class="card-value green" id="availableToSpend">
 $0
 </div>
+  <p id="financialHealth">
+  Reviewing...
+</p>
+  <p id="cashRunway">
+  Calculating...
+</p>
 </div>
 
 <div class="card">
@@ -621,6 +627,23 @@ Next 30 days of bills and income.
 
 </table>
 
+<br>
+
+<div
+  class="card"
+  id="paycheckDetails"
+>
+
+  <h3>
+    Paycheck Details
+  </h3>
+
+  <p>
+    Select a paycheck to view details.
+  </p>
+
+</div>
+  
 </div>
 
 </div>
@@ -802,6 +825,40 @@ $0
 🎯 Goals
 </h1>
 
+<div class="card">
+
+  <div class="form-grid">
+
+    <div class="input-group">
+      <label>Goal Name</label>
+      <input id="goalName" type="text">
+    </div>
+
+    <div class="input-group">
+      <label>Current Amount</label>
+      <input id="goalCurrent" type="number">
+    </div>
+
+    <div class="input-group">
+      <label>Target Amount</label>
+      <input id="goalTarget" type="number">
+    </div>
+
+  </div>
+
+  <br>
+
+  <button
+    class="btn"
+    onclick="addGoal()"
+  >
+    Add Goal
+  </button>
+
+</div>
+
+<br>
+
 <div id="goalContainer">
 </div>
 
@@ -850,6 +907,27 @@ $0
 Update Balances
 </button>
 
+<br><br>
+
+<div id="reconcileSummary">
+
+  <div class="kpi">
+    <span>Household Total</span>
+    <span id="reconcileTotal">$0</span>
+  </div>
+
+  <div class="kpi">
+    <span>Boo Total</span>
+    <span id="reconcileBoo">$0</span>
+  </div>
+
+  <div class="kpi">
+    <span>Stephen Total</span>
+    <span id="reconcileStephen">$0</span>
+  </div>
+
+</div>
+  
 </div>
 
 </div>
@@ -1416,9 +1494,26 @@ function money(value){
 
 function addActivity(message){
 
+  const now =
+    new Date();
+
+  const timestamp =
+    now.toLocaleDateString() +
+    " " +
+    now.toLocaleTimeString(
+      [],
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    );
+
   budgetData.activityLog.unshift({
-    date:new Date().toLocaleString(),
+
+    date:timestamp,
+
     message
+
   });
 
 }
@@ -1593,27 +1688,123 @@ const monthRemaining =
   remainingIncome -
   remainingExpenses;
 
+const healthStatus =
+
+  available >= 2000
+
+    ? "✅ Strong"
+
+    : available >= 500
+
+      ? "🟡 Stable"
+
+      : available >= 0
+
+        ? "⚠️ Tight"
+
+        : "🔴 Deficit";
+  
+const runwayDays =
+
+  remainingExpenses > 0
+
+    ? Math.max(
+        0,
+        Math.round(
+          available /
+          (remainingExpenses / 30)
+        )
+      )
+
+    : 30;
+  
  document.getElementById(
     "combinedCash"
 ).textContent =
     money(combinedCash);
 
-document.getElementById(
+const monthRemainingElement =
+  document.getElementById(
     "monthRemaining"
-).textContent =
-    money(monthRemaining);
-
- document.getElementById(
-  "dueBeforeIncome"
-).textContent =
-  money(
-    getDueBeforeNextIncome()
   );
+
+monthRemainingElement.textContent =
+  money(monthRemaining);
+
+monthRemainingElement.className =
+  "card-value " +
+
+  (
+    monthRemaining >= 0
+
+      ? "green"
+
+      : "red"
+  );
+
+const dueBeforeIncome =
+  getDueBeforeNextIncome();
+
+const dueBeforeIncomeElement =
+  document.getElementById(
+    "dueBeforeIncome"
+  );
+
+dueBeforeIncomeElement.textContent =
+  money(dueBeforeIncome);
+
+dueBeforeIncomeElement.className =
+  "card-value " +
+
+  (
+    dueBeforeIncome >= 3000
+
+      ? "red"
+
+      : dueBeforeIncome >= 1000
+
+        ? "orange"
+
+        : "green"
+  );  
+  
+  const availableElement =
   document.getElementById(
     "availableToSpend"
-  ).textContent =
-    money(available);
+  );
 
+availableElement.textContent =
+  money(available);
+
+availableElement.className =
+  "card-value " +
+
+  (
+    available >= 2000
+
+      ? "green"
+
+      : available >= 500
+
+        ? "purple"
+
+        : available >= 0
+
+          ? "orange"
+
+          : "red"
+  );
+
+   document.getElementById(
+  "financialHealth"
+).textContent =
+  healthStatus; 
+
+document.getElementById(
+  "cashRunway"
+).textContent =
+  `Cash Runway: ${runwayDays} Days`;
+  
   document.getElementById(
     "incomeReceived"
   ).textContent =
@@ -1716,6 +1907,55 @@ function renderComingUp(){
    PAYCHECKS
 ========================= */
 
+function showPaycheckDetails(item){
+
+  const card =
+    document.getElementById(
+      "paycheckDetails"
+    );
+
+  if(!card) return;
+
+  card.innerHTML = `
+
+    <h3>
+      Paycheck Details
+    </h3>
+
+    <p>
+      <strong>Owner:</strong>
+      ${item.owner}
+    </p>
+
+    <p>
+      <strong>Date:</strong>
+      ${item.date}
+    </p>
+
+    <p>
+      <strong>Description:</strong>
+      ${item.desc}
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      ${money(item.amount)}
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      ${
+        item.completed
+          ? "Received"
+          : "Pending"
+      }
+    </p>
+
+  `;
+
+}
+
+  
 function renderPaychecks(){
 
   const table =
@@ -1740,7 +1980,12 @@ function renderPaychecks(){
 
     const row =
       document.createElement("tr");
+    
+row.style.cursor = "pointer";
 
+row.onclick = () =>
+  showPaycheckDetails(item);
+    
     row.innerHTML = `
 
       <td>
@@ -1889,7 +2134,7 @@ function renderLedger(){
 /* =========================
    COMPLETE ITEM
 ========================= */
-
+  
 function toggleItem(id){
 
   const item =
@@ -1904,11 +2149,17 @@ function toggleItem(id){
 
   addActivity(
 
-    `${item.desc} marked ${item.completed ? "completed" : "pending"}`
+    `${item.desc} marked ${
+      item.completed
+        ? "completed"
+        : "pending"
+    }`
 
   );
 
   saveData();
+
+  generateNetYearAnalysis();
 
   renderAll();
 
@@ -2404,6 +2655,80 @@ const billsRemaining =
    GOALS
 ========================= */
 
+function deleteGoal(name){
+
+  budgetData.goals =
+    budgetData.goals.filter(
+      goal => goal.name !== name
+    );
+
+  addActivity(
+    `Goal Deleted: ${name}`
+  );
+
+ saveData();
+
+renderAll();
+
+}
+  
+function addGoal(){
+
+  const name =
+    document.getElementById(
+      "goalName"
+    ).value.trim();
+
+  const current =
+    Number(
+      document.getElementById(
+        "goalCurrent"
+      ).value
+    );
+
+  const target =
+    Number(
+      document.getElementById(
+        "goalTarget"
+      ).value
+    );
+
+  if(!name) return;
+
+  budgetData.goals.push({
+
+    name,
+
+    current,
+
+    target,
+
+    notes:""
+
+  });
+
+  addActivity(
+    `Goal Added: ${name}`
+  );
+
+  document.getElementById(
+    "goalName"
+  ).value = "";
+
+  document.getElementById(
+    "goalCurrent"
+  ).value = "";
+
+  document.getElementById(
+    "goalTarget"
+  ).value = "";
+
+saveData();
+
+renderAll();
+
+}
+                   
 function renderGoals(){
 
   const container =
@@ -2431,37 +2756,100 @@ function renderGoals(){
 
   }
 
-  budgetData.goals.forEach(goal=>{
+ budgetData.goals.forEach(goal=>{
 
-    const div =
-      document.createElement("div");
+  const percent =
 
-    div.className =
-      "goal-card";
+    goal.target > 0
 
-    div.innerHTML = `
+      ? Math.min(
+          100,
+          Math.round(
+            (goal.current / goal.target) * 100
+          )
+        )
 
-      <h3>${goal.name}</h3>
+      : 0;
 
-      <p>
-        Current:
-        ${money(goal.current)}
-      </p>
+   const progressColor =
 
-      <p>
-        Target:
-        ${money(goal.target)}
-      </p>
+  percent >= 100
 
-      <p>
-        ${goal.notes || ""}
-      </p>
+    ? "#22c55e"
 
-    `;
+    : percent >= 75
 
-    container.appendChild(div);
+      ? "#3b82f6"
 
-  });
+      : percent >= 50
+
+        ? "#f59e0b"
+
+        : "#ef4444";
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "goal-card";
+
+  div.innerHTML = `
+
+    <h3>${goal.name}</h3>
+
+    <p>
+      Current:
+      ${money(goal.current)}
+    </p>
+
+    <p>
+      Target:
+      ${money(goal.target)}
+    </p>
+
+    <p>
+      Progress:
+      ${percent}%
+    </p>
+
+    <div style="
+      width:100%;
+      background:#334155;
+      border-radius:10px;
+      overflow:hidden;
+      margin-top:8px;
+    ">
+
+      <div style="
+        width:${percent}%;
+        background:${progressColor};
+        height:12px;
+      "></div>
+
+    </div>
+
+  `;
+
+<br>
+<button
+  class="btn"
+  onclick="editGoal('${goal.name}')"
+>
+  Edit Goal
+</button>
+
+&nbsp;
+  
+<button
+  class="btn btn-danger"
+  onclick="deleteGoal('${goal.name}')"
+>
+  Delete Goal
+</button>
+   
+  container.appendChild(div);
+
+});
 
 }
   
@@ -2544,7 +2932,33 @@ function renderReconcile(){
 
   stephenSavings.value =
     budgetData.accounts.stephenSavings;
+  
+document.getElementById(
+  "reconcileTotal"
+).textContent =
+  money(
+    budgetData.accounts.booChecking +
+    budgetData.accounts.booSavings +
+    budgetData.accounts.stephenChecking +
+    budgetData.accounts.stephenSavings
+  );
 
+document.getElementById(
+  "reconcileBoo"
+).textContent =
+  money(
+    budgetData.accounts.booChecking +
+    budgetData.accounts.booSavings
+  );
+
+document.getElementById(
+  "reconcileStephen"
+).textContent =
+  money(
+    budgetData.accounts.stephenChecking +
+    budgetData.accounts.stephenSavings
+  );
+  
 }
 
 function importBudget(event){
@@ -2660,6 +3074,67 @@ function exportBudget(){
   );
 
 }
+
+  function generateNetYearAnalysis(){
+
+  const income =
+    getRemainingIncome();
+
+  const expenses =
+    getRemainingExpenses();
+
+  const largestExpense =
+    budgetData.timeline
+      .filter(item =>
+        item.type === "expense"
+      )
+      .sort(
+        (a,b) =>
+        b.amount - a.amount
+      )[0];
+
+  document.getElementById(
+    "yearIncomeChange"
+  ).textContent =
+    money(income);
+
+  document.getElementById(
+    "yearExpenseChange"
+  ).textContent =
+    money(expenses);
+
+  document.getElementById(
+    "yearNewBills"
+  ).textContent =
+    budgetData.timeline.filter(
+      item => item.type === "expense"
+    ).length;
+
+  document.getElementById(
+    "yearRemovedBills"
+  ).textContent =
+    "0";
+
+  document.getElementById(
+    "yearLargestExpense"
+  ).textContent =
+    largestExpense
+      ? `${largestExpense.desc} (${money(largestExpense.amount)})`
+      : "-";
+
+  document.getElementById(
+    "yearProjectedEnd"
+  ).textContent =
+    money(
+      getCurrentCash() +
+      income -
+      expenses -
+      Number(
+        budgetData.settings.forecastBuffer
+      )
+    );
+
+}
   
 /* =========================
    SAVE / LOAD
@@ -2694,8 +3169,20 @@ function loadData(){
 document.getElementById(
   "modeSelector"
 ).value =
-  budgetData.settings.currentMode || "NOW";    
+  budgetData.settings.currentMode || "NOW";   
+    
+document.getElementById(
+  "viewSelector"
+).value =
+  budgetData.settings.currentView ||
+  "Household";
 
+document.getElementById(
+  "forecastBuffer"
+).value =
+  budgetData.settings.forecastBuffer ||
+  0;
+    
   }
 
 }
@@ -2716,6 +3203,7 @@ function renderAll(){
   renderActivityLog();
   renderMonthlySummary();
   renderGoals();
+  generateNetYearAnalysis();
 
 }
 
@@ -2759,9 +3247,17 @@ document
 .getElementById("viewSelector")
 .addEventListener(
   "change",
-  renderAll
-);
+  function(){
 
+    budgetData.settings.currentView =
+      this.value;
+
+    saveData();
+
+    renderAll();
+
+  }
+);
 /* =========================
    PAYCHECK GENERATOR
 ========================= */
@@ -2866,7 +3362,15 @@ function buildPaychecks(){
 /* =========================
    STARTUP
 ========================= */
-
+document
+.getElementById(
+  "generateYearBtn"
+)
+.addEventListener(
+  "click",
+  generateNetYearAnalysis
+);
+  
 loadData();
 
 buildRecurringData();
@@ -2874,6 +3378,8 @@ buildRecurringData();
 buildPaychecks();
 
 renderAll();
+
+generateNetYearAnalysis();
 
 
 </script>
