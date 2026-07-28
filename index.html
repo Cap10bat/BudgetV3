@@ -1736,14 +1736,39 @@ const remainingIncome =
     ? getRemainingIncome()
     : getMonthIncomeRemaining();
   
+const isProjected =
+  budgetData.settings.currentMode === "PROJECTED";
+
+const nextIncome =
+  getNextIncome();
+
+const dueBeforeIncome =
+  getDueBeforeNextIncome();
+
 const monthRemaining =
-    remainingIncome -
-    remainingExpenses;
-  
-  const available =
-  combinedCash +
-  remainingIncome -
-  remainingExpenses;
+
+  isProjected
+
+    ? remainingIncome -
+      remainingExpenses
+
+    : (
+        nextIncome
+          ? nextIncome.amount
+          : 0
+      ) -
+      dueBeforeIncome;
+
+const available =
+
+  isProjected
+
+    ? combinedCash +
+      remainingIncome -
+      remainingExpenses
+
+    : combinedCash -
+      dueBeforeIncome;
 
 const healthStatus =
 
@@ -1774,12 +1799,17 @@ const runwayDays =
       )
 
     : 30;
+  
+const bufferGap =
 
-  const bufferGap =
-  available -
-  Number(
-    budgetData.settings.forecastBuffer || 0
-  );
+  isProjected
+
+    ? available -
+      Number(
+        budgetData.settings.forecastBuffer || 0
+      )
+
+    : available;
 
 document.getElementById(
   "bufferStatus"
