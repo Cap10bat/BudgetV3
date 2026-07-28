@@ -1478,6 +1478,40 @@ function getRemainingIncome(){
 
 }
 
+function getDueBeforeNextIncome(){
+
+  const incomes = getVisibleItems()
+    .filter(item =>
+      item.type === "income" &&
+      !item.completed
+    )
+    .sort(
+      (a,b) =>
+      new Date(a.date) -
+      new Date(b.date)
+    );
+
+  if(incomes.length === 0){
+    return 0;
+  }
+
+  const nextIncomeDate =
+    new Date(incomes[0].date);
+
+  return getVisibleItems()
+    .filter(item =>
+      item.type === "expense" &&
+      !item.completed &&
+      new Date(item.date) <= nextIncomeDate
+    )
+    .reduce(
+      (sum,item) =>
+      sum + item.amount,
+      0
+    );
+
+}
+  
 function getCurrentCash(){
 
   const view =
@@ -1565,11 +1599,12 @@ document.getElementById(
 ).textContent =
     money(monthRemaining);
 
-  document.getElementById(
-    "dueBeforeIncome"
-  ).textContent =
-    money(remainingExpenses);
-
+ document.getElementById(
+  "dueBeforeIncome"
+).textContent =
+  money(
+    getDueBeforeNextIncome()
+  );
   document.getElementById(
     "availableToSpend"
   ).textContent =
@@ -1807,6 +1842,20 @@ function renderLedger(){
     .filter(item =>
       item.completed
     );
+
+  if(completedItems.length === 0){
+
+    table.innerHTML = `
+        <tr>
+            <td colspan="5" style="text-align:center;">
+                No completed transactions yet.
+            </td>
+        </tr>
+    `;
+
+    return;
+
+}
 
   completedItems.forEach(item=>{
 
