@@ -3348,17 +3348,22 @@ async function cloudSave(){
 
   try{
 
-    await supabaseClient
-      .from("budget_sync")
-      .update({
-        data: budgetData,
-        updated_at:
-          new Date().toISOString()
-      })
-      .eq(
-        "id",
-        "household"
-      );
+    const { error } =
+  await supabaseClient
+    .from("budget_sync")
+    .upsert({
+      id: "household",
+      data: budgetData,
+      updated_at:
+        new Date().toISOString()
+    });
+
+if(error){
+
+  console.error(error);
+  return;
+
+}
 
     console.log(
       "Cloud Save Complete"
