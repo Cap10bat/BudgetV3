@@ -3356,6 +3356,55 @@ async function cloudSave(){
   }
 
 }
+
+async function cloudLoad(){
+
+  try{
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("budget_sync")
+      .select("*")
+      .eq(
+        "id",
+        "household"
+      )
+      .single();
+
+    if(error){
+
+      console.error(error);
+      return;
+
+    }
+
+    if(data?.data){
+
+      Object.assign(
+        budgetData,
+        data.data
+      );
+
+      renderAll();
+
+      console.log(
+        "Cloud Load Complete"
+      );
+
+    }
+
+  }catch(error){
+
+    console.error(
+      "Cloud Load Failed",
+      error
+    );
+
+  }
+
+}
   
 /* =========================
    SAVE / LOAD
