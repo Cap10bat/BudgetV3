@@ -2551,7 +2551,23 @@ ${item.message}
 ========================= */
 
 function getBudgetMonth(){
-    return 8;
+
+  const nextIncome =
+    getNextIncome();
+
+  if(nextIncome){
+
+    return (
+      new Date(nextIncome.date)
+        .getMonth() + 1
+    );
+
+  }
+
+  return (
+    new Date().getMonth() + 1
+  );
+
 }
 
 function getCurrentMonthItems(){
