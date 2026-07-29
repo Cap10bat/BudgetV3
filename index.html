@@ -3347,7 +3347,7 @@ async function cloudSave(){
 
   try{
 
-    const { error } =
+   const { data, error } =
   await supabaseClient
     .from("budget_sync")
     .upsert({
@@ -3364,6 +3364,11 @@ if(error){
 
 }
 
+    console.log(
+  "SAVE RESULT",
+  data
+);
+    
     console.log(
       "Cloud Save Complete"
     );
