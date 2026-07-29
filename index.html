@@ -1737,25 +1737,6 @@ document.getElementById(
 ).textContent =
     money(combinedCash);
 
-const monthRemainingElement =
-  document.getElementById(
-    "monthRemaining"
-  );
-
-monthRemainingElement.textContent =
-  money(monthRemaining);
-
-monthRemainingElement.className =
-  "card-value " +
-
-  (
-    monthRemaining >= 0
-
-      ? "green"
-
-      : "red"
-  );
-
 
 const dueBeforeIncomeElement =
   document.getElementById(
