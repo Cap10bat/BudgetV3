@@ -1367,6 +1367,8 @@ Imports never replace the entire budget.
 
 </div>
 
+<script src="https://net/npm/@supabase/supabase-js@2</script>
+
 <script>
 
 function showPage(pageId){
@@ -1394,6 +1396,18 @@ event.target.classList.add('active');
    BUDGET DATA
 ========================= */
 
+const SUPABASE_URL =
+  "https://zsfcqymmlzpfaapygmlu.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_pr_leMR3cM00zA7lI7Tcmw_baAT4Zvp";
+
+const supabase =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+  
 const budgetData = {
 
   accounts:{
@@ -3311,6 +3325,37 @@ function exportBudget(){
     );
 
 }
+
+async function cloudSave(){
+
+  try{
+
+    await supabase
+      .from("budget_sync")
+      .update({
+        data: budgetData,
+        updated_at:
+          new Date().toISOString()
+      })
+      .eq(
+        "id",
+        "household"
+      );
+
+    console.log(
+      "Cloud Save Complete"
+    );
+
+  }catch(error){
+
+    console.error(
+      "Cloud Save Failed",
+      error
+    );
+
+  }
+
+}
   
 /* =========================
    SAVE / LOAD
@@ -3322,6 +3367,8 @@ function saveData(){
     "etheridgeFinancial",
     JSON.stringify(budgetData)
   );
+
+  cloudSave();
 
 }
 
