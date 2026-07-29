@@ -602,10 +602,20 @@ $0
 </div>
 
 <div class="card">
-<h3>📅 Month Remaining</h3>
-<div class="card-value" id="monthRemaining">
-$0
-</div>
+
+  <h3>🛡️ Safe Spend</h3>
+
+  <div
+    class="card-value"
+    id="safeSpend"
+  >
+    $0
+  </div>
+
+  <p id="safeSpendDetails">
+    Available: $0 | Buffer: $0
+  </p>
+
 </div>
 
 <div class="card">
@@ -1665,6 +1675,12 @@ const available =
     : combinedCash -
       dueBeforeIncome;
 
+const safeSpend =
+  available -
+  Number(
+    budgetData.settings.forecastBuffer || 0
+  );
+  
 const healthStatus =
 
   available >= 2000
@@ -1791,6 +1807,36 @@ availableElement.className =
           : "red"
   );
 
+const safeSpendElement =
+  document.getElementById(
+    "safeSpend"
+  );
+
+safeSpendElement.textContent =
+  money(safeSpend);
+
+safeSpendElement.className =
+  "card-value " +
+  (
+    safeSpend >= 2000
+      ? "green"
+      : safeSpend >= 500
+        ? "purple"
+        : safeSpend >= 0
+          ? "orange"
+          : "red"
+  );
+
+document.getElementById(
+  "safeSpendDetails"
+).textContent =
+  `Available: ${money(available)} | Buffer: ${money(
+    Number(
+      budgetData.settings.forecastBuffer || 0
+    )
+  )}`;
+`
+  
    document.getElementById(
   "financialHealth"
 ).textContent =
