@@ -1830,11 +1830,14 @@ safeSpendElement.className =
 document.getElementById(
   "safeSpendDetails"
 ).textContent =
-  Available: ${money(available)} | Buffer: ${money(
+  "Available: " +
+  money(available) +
+  " | Buffer: " +
+  money(
     Number(
       budgetData.settings.forecastBuffer || 0
     )
-  )};
+  );
 
   
    document.getElementById(
