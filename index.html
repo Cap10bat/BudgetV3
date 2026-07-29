@@ -2927,6 +2927,18 @@ function renderGoals(){
 
 function updateBalances(){
 
+const oldBooChecking =
+  budgetData.accounts.booChecking;
+
+const oldBooSavings =
+  budgetData.accounts.booSavings;
+
+const oldStephenChecking =
+  budgetData.accounts.stephenChecking;
+
+const oldStephenSavings =
+  budgetData.accounts.stephenSavings;
+  
   budgetData.accounts.booChecking =
     Number(
       document.getElementById(
@@ -2955,9 +2967,26 @@ function updateBalances(){
       ).value
     ) || 0;
 
-  addActivity(
-    "Balances Reconciled"
-  );
+addActivity(
+  "Balances Reconciled | " +
+  "Boo Checking: " +
+  money(oldBooChecking) +
+  " → " +
+  money(budgetData.accounts.booChecking) +
+  " | Boo Savings: " +
+  money(oldBooSavings) +
+  " → " +
+  money(budgetData.accounts.booSavings) +
+  " | Stephen Checking: " +
+  money(oldStephenChecking) +
+  " → " +
+  money(budgetData.accounts.stephenChecking) +
+  " | Stephen Savings: " +
+  money(oldStephenSavings) +
+  " → " +
+  money(budgetData.accounts.stephenSavings)
+);
+``
 
 saveData();
   
