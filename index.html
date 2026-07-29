@@ -1209,6 +1209,24 @@ Etheridge Household Finance System
 
 </div>
 
+<div class="card">
+
+  <h3>☁️ Cloud Sync</h3>
+
+  <button
+    class="btn"
+    onclick="cloudLoad()"
+  >
+    ☁️ Sync Now
+  </button>
+
+  <p>
+    Download latest household budget
+    from cloud storage.
+  </p>
+
+</div>
+  
 </div>
 
 </div>
@@ -3655,10 +3673,11 @@ buildPaychecks();
 
 loadData();
 
+cloudLoad();
+
 renderAll();
 
 generateNetYearAnalysis();
-
 
 </script>
 
