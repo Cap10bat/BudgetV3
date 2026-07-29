@@ -3330,7 +3330,7 @@ async function cloudSave(){
 
   try{
 
-    await supabase
+    await supabaseClient
       .from("budget_sync")
       .update({
         data: budgetData,
