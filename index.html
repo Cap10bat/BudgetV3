@@ -1650,16 +1650,16 @@ function getPaycheckToPaycheck(){
 
   if(followingIncome){
 
-    expenses =
-      getVisibleItems()
-        .filter(item =>
-          item.type === "expense" &&
-          !item.completed &&
-          new Date(item.date) >
-            new Date(nextIncome.date) &&
-          new Date(item.date) <
-            new Date(followingIncome.date)
-        )
+   expenses =
+  getVisibleItems()
+    .filter(item =>
+      item.type === "expense" &&
+      !item.completed &&
+      new Date(item.date) >=
+        new Date(nextIncome.date) &&
+      new Date(item.date) <
+        new Date(followingIncome.date)
+    )
         .reduce(
           (sum,item) =>
             sum + item.amount,
