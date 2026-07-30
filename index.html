@@ -1732,7 +1732,7 @@ const runwayDays =
         )
       )
 
-    : 30;
+  : "∞";
   
 const bufferGap =
 
@@ -1852,9 +1852,9 @@ document.getElementById(
 document.getElementById(
   "cashRunway"
 ).textContent =
+
   "Cash Runway: " +
-  runwayDays +
-  " Days";
+  runwayDays;
   
   document.getElementById(
     "incomeReceived"
