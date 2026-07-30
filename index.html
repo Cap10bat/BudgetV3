@@ -1573,7 +1573,7 @@ function getDueBeforeNextIncome(){
     .filter(item =>
       item.type === "expense" &&
       !item.completed &&
-      new Date(item.date) <= nextIncomeDate
+      new Date(item.date) < nextIncomeDate
     )
     .reduce(
       (sum,item) =>
@@ -1681,52 +1681,43 @@ const nextIncome =
 
 const dueBeforeIncome =
   getDueBeforeNextIncome();
-
+  
 const monthRemaining =
 
+  remainingIncome -
+  remainingExpenses;
+
+const available =
   isProjected
-
-    ? remainingIncome -
+    ? combinedCash +
+      remainingIncome -
       remainingExpenses
-
-    : (
+    : combinedCash +
+      (
         nextIncome
           ? nextIncome.amount
           : 0
       ) -
       dueBeforeIncome;
 
-const available =
-
-  isProjected
-
-    ? combinedCash +
-      remainingIncome -
-      remainingExpenses
-
-    : combinedCash -
-      dueBeforeIncome;
-
 const safeSpend =
-  available -
-  Number(
-    budgetData.settings.forecastBuffer || 0
+
+  Math.max(
+    0,
+    available -
+    Number(
+      budgetData.settings.forecastBuffer || 0
+    )
   );
   
 const healthStatus =
 
-  available >= 2000
-
+  combinedCash >= 2000
     ? "✅ Strong"
-
-    : available >= 500
-
+    : combinedCash >= 500
       ? "🟡 Stable"
-
-      : available >= 0
-
+      : combinedCash >= 0
         ? "⚠️ Tight"
-
         : "🔴 Deficit";
   
 const runwayDays =
@@ -1736,7 +1727,7 @@ const runwayDays =
     ? Math.max(
         0,
         Math.round(
-          available /
+          combinedCash /
           (remainingExpenses / 30)
         )
       )
@@ -2450,36 +2441,6 @@ addRecurringEvent(
    FORECAST ENGINE
 ========================= */
 
-function getRemainingIncome(){
-
-  return getVisibleItems()
-    .filter(item =>
-      item.type === "income" &&
-      !item.completed
-    )
-    .reduce(
-      (total,item)=>
-      total + item.amount,
-      0
-    );
-
-}
-
-function getRemainingExpenses(){
-
-  return getVisibleItems()
-    .filter(item =>
-      item.type === "expense" &&
-      !item.completed
-    )
-    .reduce(
-      (total,item)=>
-      total + item.amount,
-      0
-    );
-
-}
-
 function getCurrentCash(){
 
   const view =
@@ -2551,11 +2512,9 @@ const projectedFlow =
     projectedExpenses;
 
 const projectedEnd =
-    currentCash +
-    projectedFlow -
-    Number(
-        budgetData.settings.forecastBuffer
-    );
+
+  currentCash +
+  projectedFlow;
   document.getElementById(
     "nowCash"
   ).textContent =
@@ -2648,18 +2607,6 @@ ${item.message}
 
 function getBudgetMonth(){
 
-  const nextIncome =
-    getNextIncome();
-
-  if(nextIncome){
-
-    return (
-      new Date(nextIncome.date)
-        .getMonth() + 1
-    );
-
-  }
-
   return (
     new Date().getMonth() + 1
   );
@@ -2671,14 +2618,18 @@ function getCurrentMonthItems(){
     const currentMonth =
         getBudgetMonth();
 
-    return getVisibleItems().filter(item => {
+ return getVisibleItems().filter(item => {
 
-        const itemMonth =
-            new Date(item.date).getMonth() + 1;
+    const itemDate =
+        new Date(item.date);
 
-        return itemMonth === currentMonth;
+    return (
+        itemDate.getMonth() + 1 === currentMonth &&
+        itemDate.getFullYear() ===
+        new Date().getFullYear()
+    );
 
-    });
+});
 
 }
 
@@ -3444,7 +3395,8 @@ function saveData(){
     "etheridgeFinancial",
     JSON.stringify(budgetData)
   );
-
+  
+cloudSave();
 }
 
 function loadData(){
