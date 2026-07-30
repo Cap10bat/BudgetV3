@@ -644,9 +644,30 @@ $0
     $0
   </div>
 
-  <p id="nextIncomeDate">
-    No income scheduled
+<p id="nextIncomeDate">
+  No income scheduled
+</p>
+
+</div>
+  
+<div class="card">
+
+  <h3>💰 Paycheck To Paycheck</h3>
+
+  <div
+    class="card-value green"
+    id="paycheckToPaycheck"
+  >
+    $0
+  </div>
+
+  <p>
+    Cash after next paycheck &
+    bills before following paycheck
   </p>
+
+</div>
+`
 
 </div>
   
@@ -1600,6 +1621,60 @@ function getNextIncome(){
   return incomes[0] || null;
 
 }
+
+function getPaycheckToPaycheck(){
+
+  const incomes =
+    getVisibleItems()
+      .filter(item =>
+        item.type === "income" &&
+        !item.completed
+      )
+      .sort(
+        (a,b) =>
+          new Date(a.date) -
+          new Date(b.date)
+      );
+
+  if(incomes.length === 0){
+    return getCurrentCash();
+  }
+
+  const nextIncome =
+    incomes[0];
+
+  const followingIncome =
+    incomes[1];
+
+  let expenses = 0;
+
+  if(followingIncome){
+
+    expenses =
+      getVisibleItems()
+        .filter(item =>
+          item.type === "expense" &&
+          !item.completed &&
+          new Date(item.date) >
+            new Date(nextIncome.date) &&
+          new Date(item.date) <
+            new Date(followingIncome.date)
+        )
+        .reduce(
+          (sum,item) =>
+            sum + item.amount,
+          0
+        );
+
+  }
+
+  return (
+    getCurrentCash() +
+    nextIncome.amount -
+    expenses
+  );
+
+}
   
 function getCurrentCash(){
 
@@ -1888,6 +1963,13 @@ document.getElementById(
   nextIncome
     ? `${nextIncome.owner} • ${nextIncome.date}`
     : "No income scheduled";
+
+  document.getElementById(
+  "paycheckToPaycheck"
+).textContent =
+  money(
+    getPaycheckToPaycheck()
+  );
   
 }
 
