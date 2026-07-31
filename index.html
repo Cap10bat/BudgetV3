@@ -102,6 +102,7 @@ body{
   flex:1;
   padding:20px;
   overflow:auto;
+  width:100%;
 }
 
 /* TOP BAR */
@@ -416,6 +417,14 @@ textarea{
 
 .help-block h3{
   margin-bottom:8px;
+}
+
+    #timelineContainer{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(320px,1fr));
+  gap:16px;
+  align-items:start;
 }
 
 /* MOBILE */
@@ -2255,6 +2264,9 @@ function renderTimeline(){
     card.className =
       "activity-item";
 
+    card.style.marginBottom = "0";
+
+
     card.innerHTML = `
 
       <strong>${item.date}</strong>
@@ -2396,7 +2408,7 @@ function addRecurringEvent(
       String(dueDay).padStart(2,'0');
 
     const id =
-      `${desc}-${month}`;
+  `${owner}-${desc}-${month}`;
 
     const exists =
       budgetData.timeline.some(
