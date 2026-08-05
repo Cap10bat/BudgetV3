@@ -1826,17 +1826,8 @@ const monthRemaining =
   remainingExpenses;
 
 const available =
-  isProjected
-    ? combinedCash +
-      remainingIncome -
-      remainingExpenses
-    : combinedCash +
-      (
-        nextIncome
-          ? nextIncome.amount
-          : 0
-      ) -
-      dueBeforeIncome;
+  combinedCash -
+  dueBeforeIncome;
 
 const safeSpend =
 
